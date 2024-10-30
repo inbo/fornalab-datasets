@@ -19,7 +19,7 @@ The structure for each dataset in [datasets](datasets) is based on [Cookiecutter
 │   ├── raw                  : Source data, input for mapping script
 │   └── processed            : Darwin Core output of mapping script GENERATED
 │
-├── src
+└── src
     └── dwc_mapping.Rmd      : Darwin Core mapping script
 
 ```
