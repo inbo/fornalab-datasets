@@ -1,0 +1,122 @@
+---
+title: "Darwin Core Mapping"
+subtitle: "Vegetation survey data from FORMICA WP1"
+author: "Sanne Govaert"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
+```
+
+Load libraries:
+
+```{r message = FALSE}
+library(readxl)
+library(dplyr)
+library(here)
+library(EML)
+```
+
+# Read source data
+
+Create a data frame `input_data` from the source data:
+The source data was corrected in Excel
+Muskrat occurrences opened in openRefine
+Obsolete columns removed
+some columns renamed to DwC term
+File exported to csv
+
+
+```{r}
+directory <- here::here("datasets", "fornalab-formica-wp1-vegetation", "data")
+raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Herb")
+raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Plot characteristics")
+```
+```{r basic metadata}
+shortname <- "FORMICA vegetation surveys"
+title <- "Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the FORMICA project"
+description <- c(
+  "We focused on deciduous broadleaved forests in temperate Europe. Study sites are situated in typical European fragmented landscapes, with forest patches surrounded by a matrix of arable fields and grasslands. Forest stands were selected across nine regions along a latitudinal gradient from Italy to Norway to capture as much of the macroclimatic variation across Europe as possible. In the south, middle and north of this latitudinal gradient, more specifically in Italy, Belgium and Norway, an elevational gradient with three levels (low, medium and high) was included to capture macroclimatic variation caused by elevation. A total of 15 sites were thus selected: six regions without an elevational gradient and three regions with three levels of elevation.",
+  "The fforest stands had a minimal area of 4 ha, were mainly dominated by oaks (Quercus robur, Quercus petraea, and Quercus cerris), Fagus sylvatica, Betula pubescens, Populus tremula, Ulmus glabra, Alnus incana and Carpinus betulus. All sites had the same type of land-use history (ancient forest) and intermediate soil moisture (mesic).",
+  "At each site, three forest stands with different forest management were selected:", 
+"1. Unthinned: typically a dense forest, with a well-developed shrub layer, high basal area (mean ± SE was here 28.8 ± 1.5 m2/ha) and high canopy cover (openness 5.8 ± 0.6%, mean of three densitometer measurements), and not thinned for at least 10 years and mostly >30 years) ago,",
+"2. Thinned: intermediate to types one and three (openness 6.5 ± 0.6%, basal area 31.4 ± 1.9 m2/ha); even-aged and regularly thinned, but not recently (probably 5–10 years ago).",
+"3. recently thinned:  open, even-aged and recently thinned forest (probably within 4 years of sampling), indicated by the presence of cut tree stumps, and characterized by the absence of a shrub and subdominant tree layer, with low basal area (21.6 ± 1.3 m2/ha) and low canopy cover (mean openness 14.8 ± 2.1%)",
+"We established 100 m transects from the southern forest edge to the forest interior of each forest stand at each site. We thus established 45 transects in total (15 sites × 3 management types). The transect started at the hypothetical line of tree stems at the edge of the forest stand (0 m). These edges are outer edges, bordering a matrix of agricultural land and were created by ancient deforestations. The transect was installed perpendicular to the edge and at least 100 m from any another edge.",
+"Along each transect, five 3 × 3 m2 quadrats were installed at an exponentially increasing distance from the forest edge because of the exponential change in microclimatic condition close to the edge, resulting in a total of 225 plots. The centres of the plots were thus at distances of 1.5, 4.5, 12.5, 35.5 and 99.5 m from the edge.",
+"Vegetation surveys were conducted at the peak of vegetation biomass from May until early July 2018, depending on the regional phenology. All vascular plant species were identified and their percentage ground cover visually estimated by teams of two persons. The herb layer included all vascular species, both woody plants smaller than 1 m and non-woody plants, as well as lianas.",
+"Plants were identified to the species level whenever possible and uncertain identifications were photographed and checked with specialists in the field.",
+"For more information on the methodology (and the observed patterns along the edge to core gradients), see Govaert et al., 2019."
+)
+```
+
+
+```{r metadata}
+publisher <- "Ghent University"
+update_frequency <- "not planned"
+type <- "occurrence"
+subtype <- "observation"
+metadata_language <- "en"
+data_language <- "en"
+data_license <- "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
+```
+
+Darwin core
+
+```{r}
+occurrence <-
+  raw_data_herb %>% 
+  mutate(
+    .keep = "none",
+    language = data_language,
+    type = "Event",
+    license = data_license, 
+    rightsHolder = publisher,
+    datasetID = "", # doi of published dataset
+    datasetName = paste(shortname, ":", title),
+    basisOfRecord = "HumanObservation",
+    collectionCode = "FORMICA",
+    occurrenceID = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", .data$Species_name_long), # Nog aan te passen
+    organismQuantity = .data$Cover,
+    organismQuantityType = "% cover",
+    occurrenceStatus = "present",
+    eventID = .data$Code, # Plot
+    parentEventID = substr(.data$Code, 1, 6), # Transect
+    eventDate = .data$Date,
+    habitat = "Temperate forest",
+    samplingProtocol = "vegetation survey",
+    decimalLatitude = .data$LAT,
+    decimalLongitude = .data$LON,
+    geodeticDatum = "EPSG:4326",
+    coordinateUncertaintyInMeters = 30,
+    country = dplyr::recode(
+      .data$Region,
+      "PO" = "Poland",
+      "GE" = "Germany",
+      "BE" = "Belgium",
+      "NF" = "France",
+      "SW" = "Switzerland",
+      "CS" = "Sweden",
+      "SS" = "Sweden",
+      "NO" = "Norway",
+      "IT" = "Italy"
+      ),
+    scientificName = .data$Species_name_long,
+    kingdom = "Plantae",
+    taxonRank = dplyr::if_else(
+      grepl("subsp.", .data$Species_name_long, fixed = TRUE), 
+      "subspecies",
+      "species"
+    )
+  )
+```
+
+```{r}
+dir_export <- here::here(directory, "processed")
+ if (!dir.exists(dir_export)) {
+    dir.create(dir_export, recursive = TRUE)
+  }
+readr::write_csv(occurrence, here::here(dir_export, "occurrence.csv"), na = "")
+```
