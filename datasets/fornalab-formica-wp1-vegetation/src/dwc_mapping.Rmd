@@ -106,6 +106,7 @@ taxonomic_coverage <- data.frame(
   taxonRank = "kingdom"
 )
 taxonomic_description <- "All vascular plants (including woody species that are smaller than 1 m."
+references <- c("Govaert S, Meeussen C, Vanneste T, et al. Edge influence on understorey plant communities depends on forest management. J Veg Sci. 2020;00:1–12. doi.org/10.1111/jvs.12844")
 ```
 
 # Create ID's
@@ -220,12 +221,14 @@ dir_export <- here::here(directory, "processed")
  if (!dir.exists(dir_export)) {
     dir.create(dir_export, recursive = TRUE)
   }
+readr::write_csv(event, here::here(dir_export, "event.csv"), na = "")
 readr::write_csv(occurrence, here::here(dir_export, "occurrence.csv"), na = "")
+readr::write_csv(releve, here::here(dir_export, "releve.csv"), na = "")
 ```
 
 # Create metadata file (eml.xml)
 
-## Function to c
+## Function to create contributors in EML format
 
 ```{r}
 create_eml_contributors <- function(contributor_list) {
@@ -324,6 +327,9 @@ eml$dataset$coverage$taxonomicCoverage <-
       })
   )
 eml$dataset$coverage$taxonomicCoverage$taxonomicDescription <- taxonomic_description
+
+# Bibliographic citations
+eml$additionalMetadata$metadata$gbif$bibliography$bibliography$citation <- references
 ```
 
 
