@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="e2a95426-d98a-46b9-82b3-178875162f13" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="f9fcd834-2bcb-4e36-8893-972ae5d539f5" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <title>FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
     <creator>
@@ -101,10 +101,10 @@
       <temporalCoverage>
         <rangeOfDates>
           <beginDate>
-            <calendarDate>2018-05-01</calendarDate>
+            <calendarDate>2018-05-08</calendarDate>
           </beginDate>
           <endDate>
-            <calendarDate>2018-07-31</calendarDate>
+            <calendarDate>2018-06-30</calendarDate>
           </endDate>
         </rangeOfDates>
       </temporalCoverage>
