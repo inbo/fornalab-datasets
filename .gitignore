@@ -42,15 +42,11 @@ vignettes/*.pdf
 docs/
 
 # Data
-datasets/*/data/processed/*
-datasets/*/data/interim/*
-!datasets/*/data/processed/eml.xml
 *.xlsx
 *.geojson
 *.zip
 *.txt
 *.gz
-*.csv
 occurrence.RData
 
 # Mac OS X
