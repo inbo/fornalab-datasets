@@ -98,8 +98,8 @@ creators <- list(
 metadata_provider <- purrr::keep(creators, ~ .x$title %in% c("Sanne Govaert", "Pieter Vangansbeke"))
 contact <- purrr::keep(creators, ~ .x$title == "Sanne Govaert")
 keywords <- c("vascular plants", "understorey herbs", "vegetation survey", "forest edges", "temperate forests", "forest structure")
-begin_date <- NA
-end_date <- NA
+begin_date <- "2018-05-01"
+end_date <- "2018-07-31"
 geographic_description <- "Europe"
 taxonomic_coverage <- data.frame(
   scientificName = "Plantae",
@@ -246,85 +246,84 @@ create_eml_contributors <- function(contributor_list) {
 This script is based on input data above.
 
 ```{r EML transformation}
- # Initiate EML
- eml <- list(
-   packageId = uuid::UUIDgenerate(),
-   system = "uuid",
-   dataset = list()
- )
+# Initiate EML
+eml <- list(
+  packageId = uuid::UUIDgenerate(),
+  system = "uuid",
+  dataset = list()
+)
 
- # Get properties
- #project <- x$project # ????????????
+# Get properties
+# project <- x$project # ????????????
 
- # Set title
- eml$dataset$title <- title
+# Set title
+eml$dataset$title <- title
 
- # Set abstract
- eml$dataset$abstract$para <- description
+# Set abstract
+eml$dataset$abstract$para <- description
 
- # Set update frequency (requires a description, even if empty)
- eml$dataset$maintenance <- list(
-   description = list(para = ""),
-   maintenanceUpdateFrequency = update_frequency
- )
+# Set update frequency (requires a description, even if empty)
+eml$dataset$maintenance <- list(
+  description = list(para = ""),
+  maintenanceUpdateFrequency = update_frequency
+)
 
- # Set creators
- eml$dataset$creator <- create_eml_contributors(creators)
+# Set creators
+eml$dataset$creator <- create_eml_contributors(creators)
 
- # Set contacts
-  eml$dataset$contact <- create_eml_contributors
-  
-   # Set metadata providers
-  eml$dataset$metadataProvider <- create_eml_contributors(metadata_provider)
+# Set contacts
+eml$dataset$contact <- create_eml_contributors
 
- # Set keywords
- eml$dataset$keywordSet <-
-   list(
-     list(
-       keywordThesaurus = paste(
-         "GBIF Dataset Type Vocabulary:",
-         "http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml"
-       ),
-       keyword = "Occurrence"
-     ),
-     list(
-       keywordThesaurus = paste(
-         "GBIF Dataset Subtype Vocabulary:",
-         "http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml"
-       ),
-       keyword = "Observation"
-     ),
-     list(
-       keywordThesaurus = "n/a",
-       keyword = keywords
-     )
-   )
+# Set metadata providers
+eml$dataset$metadataProvider <- create_eml_contributors(metadata_provider)
 
- # Set license
- eml$dataset$intellectualRights$para <- metadata_license
-
- # Set temporal coverage and geographicDescription
- eml$dataset$coverage <-
-   EML::set_coverage(
-     beginDate = begin_date,
-     endDate = end_date,
-     geographicDescription = geographic_description
-   )
- 
- # Set taxonomic coverage
- eml$dataset$coverage$taxonomicCoverage <-
+# Set keywords
+eml$dataset$keywordSet <-
+  list(
     list(
-      taxonomicClassification =
-        purrr::map(1:nrow(taxonomic_coverage), function(i) {
-          current_row <- taxonomic_coverage[i, ]
-          list(
-            taxonRankName = current_row$taxonRank,
-            taxonRankValue = current_row$scientificName
-          )
-        }
-      )
+      keywordThesaurus = paste(
+        "GBIF Dataset Type Vocabulary:",
+        "http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml"
+      ),
+      keyword = "Occurrence"
+    ),
+    list(
+      keywordThesaurus = paste(
+        "GBIF Dataset Subtype Vocabulary:",
+        "http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml"
+      ),
+      keyword = "Observation"
+    ),
+    list(
+      keywordThesaurus = "n/a",
+      keyword = keywords
     )
- eml$dataset$coverage$taxonomicCoverage$taxonomicDescription <- taxonomic_description
+  )
+
+# Set license
+eml$dataset$intellectualRights$para <- metadata_license
+
+# Set temporal coverage and geographicDescription
+eml$dataset$coverage <-
+  EML::set_coverage(
+    beginDate = begin_date,
+    endDate = end_date,
+    geographicDescription = geographic_description
+  )
+
+# Set taxonomic coverage
+eml$dataset$coverage$taxonomicCoverage <-
+  list(
+    taxonomicClassification =
+      purrr::map(1:nrow(taxonomic_coverage), function(i) {
+        current_row <- taxonomic_coverage[i, ]
+        list(
+          taxonRankName = current_row$taxonRank,
+          taxonRankValue = current_row$scientificName
+        )
+      })
+  )
+eml$dataset$coverage$taxonomicCoverage$taxonomicDescription <- taxonomic_description
 ```
 
 
