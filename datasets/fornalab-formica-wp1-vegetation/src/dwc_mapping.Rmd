@@ -16,82 +16,139 @@ Load libraries:
 library(readxl)
 library(dplyr)
 library(here)
+library(digest)        
 library(EML)
 ```
 
 # Read source data
-
-Create a data frame `input_data` from the source data:
-The source data was corrected in Excel
-Muskrat occurrences opened in openRefine
-Obsolete columns removed
-some columns renamed to DwC term
-File exported to csv
-
 
 ```{r}
 directory <- here::here("datasets", "fornalab-formica-wp1-vegetation", "data")
 raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Herb")
 raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Plot characteristics")
 ```
+# Provide metadata
+
 ```{r basic metadata}
-shortname <- "FORMICA vegetation surveys"
-title <- "Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the FORMICA project"
+shortname <- "FORMICA_VEG"
+title <- "Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
 description <- c(
-  "We focused on deciduous broadleaved forests in temperate Europe. Study sites are situated in typical European fragmented landscapes, with forest patches surrounded by a matrix of arable fields and grasslands. Forest stands were selected across nine regions along a latitudinal gradient from Italy to Norway to capture as much of the macroclimatic variation across Europe as possible. In the south, middle and north of this latitudinal gradient, more specifically in Italy, Belgium and Norway, an elevational gradient with three levels (low, medium and high) was included to capture macroclimatic variation caused by elevation. A total of 15 sites were thus selected: six regions without an elevational gradient and three regions with three levels of elevation.",
-  "The fforest stands had a minimal area of 4 ha, were mainly dominated by oaks (Quercus robur, Quercus petraea, and Quercus cerris), Fagus sylvatica, Betula pubescens, Populus tremula, Ulmus glabra, Alnus incana and Carpinus betulus. All sites had the same type of land-use history (ancient forest) and intermediate soil moisture (mesic).",
-  "At each site, three forest stands with different forest management were selected:", 
-"1. Unthinned: typically a dense forest, with a well-developed shrub layer, high basal area (mean ± SE was here 28.8 ± 1.5 m2/ha) and high canopy cover (openness 5.8 ± 0.6%, mean of three densitometer measurements), and not thinned for at least 10 years and mostly >30 years) ago,",
-"2. Thinned: intermediate to types one and three (openness 6.5 ± 0.6%, basal area 31.4 ± 1.9 m2/ha); even-aged and regularly thinned, but not recently (probably 5–10 years ago).",
-"3. recently thinned:  open, even-aged and recently thinned forest (probably within 4 years of sampling), indicated by the presence of cut tree stumps, and characterized by the absence of a shrub and subdominant tree layer, with low basal area (21.6 ± 1.3 m2/ha) and low canopy cover (mean openness 14.8 ± 2.1%)",
-"We established 100 m transects from the southern forest edge to the forest interior of each forest stand at each site. We thus established 45 transects in total (15 sites × 3 management types). The transect started at the hypothetical line of tree stems at the edge of the forest stand (0 m). These edges are outer edges, bordering a matrix of agricultural land and were created by ancient deforestations. The transect was installed perpendicular to the edge and at least 100 m from any another edge.",
-"Along each transect, five 3 × 3 m2 quadrats were installed at an exponentially increasing distance from the forest edge because of the exponential change in microclimatic condition close to the edge, resulting in a total of 225 plots. The centres of the plots were thus at distances of 1.5, 4.5, 12.5, 35.5 and 99.5 m from the edge.",
-"Vegetation surveys were conducted at the peak of vegetation biomass from May until early July 2018, depending on the regional phenology. All vascular plant species were identified and their percentage ground cover visually estimated by teams of two persons. The herb layer included all vascular species, both woody plants smaller than 1 m and non-woody plants, as well as lianas.",
-"Plants were identified to the species level whenever possible and uncertain identifications were photographed and checked with specialists in the field.",
-"For more information on the methodology (and the observed patterns along the edge to core gradients), see Govaert et al., 2019."
+  "This is a vegetation survey dataset of ancient deciduous broadleaved forests in temperate Europe. It contains plot data of the herb layer collected in the framework of the Forest Microclimate Assessment (<a href=\"https://formica.ugent.be/\">FORMICA</a>) project.  In total, 125 vegetation relevées of 3x3 m² were surveyed across four gradients:",
+"1. Macroclimatic gradient from Italy to Norway",
+"2. Elevational gradient",
+"3. Gradient of management types (unthinned, thinned 5–10 years ago and recently thinned)",
+"4. 100m edge-to-interior gradient",
+"This study was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833).",
+"For more information on the methodology (and the observed patterns along the edge to core gradients), see Govaert et al. (2019, <a href=\"http://doi.org/10.1111/jvs.12844\">http://doi.org/10.1111/jvs.12844</a>)."
 )
 ```
 
 
 ```{r metadata}
 publisher <- "Ghent University"
-update_frequency <- "not planned"
+update_frequency <- "Not planned"
 type <- "occurrence"
 subtype <- "observation"
 metadata_language <- "en"
 data_language <- "en"
 data_license <- "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
+metadata_license <- "cc0-1.0"
+creators <- list(
+  list(
+    title = "Sanne Govaert", 
+    email = "sanne.govaert@inbo.be",
+    organization = "Research Institute for Nature and Forest (INBO)",
+    first_name = "Sanne", 
+    last_name = "Govaert", 
+    orcid = "0000-0002-8939-1305"
+  ),
+  list(
+    title = "Pieter Vangansbeke", 
+    email = "pieter.vangansbeke@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Pieter", 
+    last_name = "Vangansbeke", 
+    orcid = "0000-0002-6356-2858"
+  ),
+    list(
+    title = "Camille Meeussen", 
+    email = NA_character_,
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Camille", 
+    last_name = "Meeussen", 
+    orcid = "0000-0002-5869-4936"
+  ),
+    list(
+    title = "Thomas Vanneste", 
+    email = "thomas.vanneste@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Thomas", 
+    last_name = "Vanneste", 
+    orcid = "0000-0001-5296-917X"
+  ),
+    list(
+    title = "Pieter De Frenne", 
+    email = "pieter.defrenne@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Pieter", 
+    last_name = "De Frenne", 
+    orcid = "0000-0002-8613-0943"
+  )
+)
+metadata_provider <- purrr::keep(creators, ~ .x$title %in% c("Sanne Govaert", "Pieter Vangansbeke"))
+contact <- purrr::keep(creators, ~ .x$title == "Sanne Govaert")
+keywords <- c("vascular plants", "understorey herbs", "vegetation survey", "forest edges", "temperate forests", "forest structure")
+begin_date <- NA
+end_date <- NA
+geographic_description <- "Europe"
+taxonomic_coverage <- data.frame(
+  scientificName = "Plantae",
+  taxonRank = "kingdom"
+)
+taxonomic_description <- "All vascular plants (including woody species that are smaller than 1 m."
 ```
 
-Darwin core
+# Create ID's
 
 ```{r}
-occurrence <-
+vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
+data_plot <-
+  raw_data_plot %>%
+  dplyr::mutate(
+    Code = paste0(.data$Region, .data$Elevation, .data$Type, .data$Plot),
+    event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
+    parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":")
+  )
+data_herb <- 
   raw_data_herb %>% 
-  mutate(
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
+    parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":")
+  )
+```
+
+# Darwin core transformation
+
+```{r dwc transformation}
+event <- 
+  data_plot %>% 
+  dplyr::mutate(
     .keep = "none",
-    language = data_language,
     type = "Event",
+    language = data_language,
     license = data_license, 
     rightsHolder = publisher,
     datasetID = "", # doi of published dataset
-    datasetName = paste(shortname, ":", title),
-    basisOfRecord = "HumanObservation",
-    collectionCode = "FORMICA",
-    occurrenceID = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", .data$Species_name_long), # Nog aan te passen
-    organismQuantity = .data$Cover,
-    organismQuantityType = "% cover",
-    occurrenceStatus = "present",
-    eventID = .data$Code, # Plot
-    parentEventID = substr(.data$Code, 1, 6), # Transect
+    institutionCode = "UGent", 
+    datasetName = paste(shortname, "-", title),
+    eventID = .data$event_id,
+    parentEventID = .data$parent_event_id,
     eventDate = .data$Date,
-    habitat = "Temperate forest",
+    samplesizeValue = 9,
+    sampleSizeUnit = "m2",
+    habitat = "temperate forest",
     samplingProtocol = "vegetation survey",
-    decimalLatitude = .data$LAT,
-    decimalLongitude = .data$LON,
-    geodeticDatum = "EPSG:4326",
-    coordinateUncertaintyInMeters = 30,
-    country = dplyr::recode(
+        country = dplyr::recode(
       .data$Region,
       "PO" = "Poland",
       "GE" = "Germany",
@@ -103,6 +160,31 @@ occurrence <-
       "NO" = "Norway",
       "IT" = "Italy"
       ),
+    decimalLatitude = .data$LAT,
+    decimalLongitude = .data$LON,
+    geodeticDatum = "EPSG:4326",
+    coordinateUncertaintyInMeters = 30,
+  )
+
+occurrence <-
+  raw_data_herb %>% 
+  mutate(
+    .keep = "none",
+    language = data_language,
+    type = "Event",
+    license = data_license, 
+    rightsHolder = publisher,
+    datasetID = "", # doi of published dataset
+    datasetName = paste(shortname, "-", title),
+    basisOfRecord = "HumanObservation",
+    collectionCode = "FORMICA",
+    occurrenceID = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", .data$Species_name_long), # Nog aan te passen
+    #recorderdedBy = "x",
+    organismQuantity = .data$Cover,
+    organismQuantityType = "% cover",
+    occurrenceStatus = "present",
+    eventID = .data$Code, # Plot
+    parentEventID = substr(.data$Code, 1, 6), # Transect
     scientificName = .data$Species_name_long,
     kingdom = "Plantae",
     taxonRank = dplyr::if_else(
@@ -111,12 +193,142 @@ occurrence <-
       "species"
     )
   )
+
+releve <- 
+  raw_data_plot %>%
+  dplyr::mutate(
+    Code = paste0(.data$Region, .data$Elevation, .data$Type, .data$Plot)
+  ) %>% 
+  dplyr::mutate(
+    id = .data$Code,
+    poject = "FORMICA (Forest Microclimate Assessment)",
+    coverTotalInPercentage = .data$Total_cover,
+    coverTreesInPercentage = .data$Tree_cover,
+    coverShrubsInPercentage	= .data$Shrub_cover,
+    coverHerbsInPercentage	= .data$Vascular_plants,
+    coverMossesInPercentage	= .data$Moss,
+    coverLitterInPercentage = .data$Litter,
+    mossesIdentified = "False",
+    lichensIdentified = "False"
+  )
 ```
 
-```{r}
+## Write darwin core
+
+```{r write dwc}
 dir_export <- here::here(directory, "processed")
  if (!dir.exists(dir_export)) {
     dir.create(dir_export, recursive = TRUE)
   }
 readr::write_csv(occurrence, here::here(dir_export, "occurrence.csv"), na = "")
 ```
+
+# Create metadata file (eml.xml)
+
+## Function to c
+
+```{r}
+create_eml_contributors <- function(contributor_list) {
+  purrr::map(contributor_list, ~ EML::set_responsibleParty(
+    givenName = .$first_name,
+    surName = .$last_name,
+    organizationName = .$organization, # Discouraged by EML, but used by IPT
+    email = .$email,
+    userId = if (!is.na(.$orcid)) {
+      list(directory = "https://orcid.org/", .$orcid)
+    } else {
+      NULL
+    }
+  ))
+}
+```
+
+This script is based on input data above.
+
+```{r EML transformation}
+ # Initiate EML
+ eml <- list(
+   packageId = uuid::UUIDgenerate(),
+   system = "uuid",
+   dataset = list()
+ )
+
+ # Get properties
+ #project <- x$project # ????????????
+
+ # Set title
+ eml$dataset$title <- title
+
+ # Set abstract
+ eml$dataset$abstract$para <- description
+
+ # Set update frequency (requires a description, even if empty)
+ eml$dataset$maintenance <- list(
+   description = list(para = ""),
+   maintenanceUpdateFrequency = update_frequency
+ )
+
+ # Set creators
+ eml$dataset$creator <- create_eml_contributors(creators)
+
+ # Set contacts
+  eml$dataset$contact <- create_eml_contributors
+  
+   # Set metadata providers
+  eml$dataset$metadataProvider <- create_eml_contributors(metadata_provider)
+
+ # Set keywords
+ eml$dataset$keywordSet <-
+   list(
+     list(
+       keywordThesaurus = paste(
+         "GBIF Dataset Type Vocabulary:",
+         "http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml"
+       ),
+       keyword = "Occurrence"
+     ),
+     list(
+       keywordThesaurus = paste(
+         "GBIF Dataset Subtype Vocabulary:",
+         "http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml"
+       ),
+       keyword = "Observation"
+     ),
+     list(
+       keywordThesaurus = "n/a",
+       keyword = keywords
+     )
+   )
+
+ # Set license
+ eml$dataset$intellectualRights$para <- metadata_license
+
+ # Set temporal coverage and geographicDescription
+ eml$dataset$coverage <-
+   EML::set_coverage(
+     beginDate = begin_date,
+     endDate = end_date,
+     geographicDescription = geographic_description
+   )
+ 
+ # Set taxonomic coverage
+ eml$dataset$coverage$taxonomicCoverage <-
+    list(
+      taxonomicClassification =
+        purrr::map(1:nrow(taxonomic_coverage), function(i) {
+          current_row <- taxonomic_coverage[i, ]
+          list(
+            taxonRankName = current_row$taxonRank,
+            taxonRankValue = current_row$scientificName
+          )
+        }
+      )
+    )
+ eml$dataset$coverage$taxonomicCoverage$taxonomicDescription <- taxonomic_description
+```
+
+
+```{r write EML}
+EML::write_eml(eml, here::here(dir_export, "eml.xml"))
+```
+
