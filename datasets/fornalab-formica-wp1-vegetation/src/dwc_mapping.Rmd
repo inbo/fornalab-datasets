@@ -24,9 +24,9 @@ library(EML)
 
 ```{r}
 directory <- here::here("datasets", "fornalab-formica-wp1-vegetation", "data")
-raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Herb")
-raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Plot characteristics")
-raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Digitalization info")
+raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Herb")
+raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Plot characteristics")
+raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Digitalization info")
 ```
 # Provide metadata
 
@@ -192,7 +192,7 @@ occurrence <-
     basisOfRecord = "HumanObservation",
     collectionCode = "FORMICA",
     occurrenceID = .data$occurrence_id,
-    recorderdedBy = .data$Surveyors,
+    recorderdedBy = .data$Surveyors, # not mapped
     organismQuantity = .data$Cover,
     organismQuantityType = "% coverage of herb layer",
     occurrenceStatus = "present",
@@ -264,9 +264,6 @@ eml <- list(
   system = "uuid",
   dataset = list()
 )
-
-# Get properties
-# project <- x$project # ????????????
 
 # Set title
 eml$dataset$title <- title
