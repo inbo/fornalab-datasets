@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="cec95a70-b5c0-4db6-9ede-91ae712ff69d" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="5e30f1a3-3325-4297-af5a-1ad44bac6a07" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
-    <title>Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the FORMICA project</title>
+    <title>Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
     <creator>
       <individualName>
         <givenName>Sanne</givenName>
@@ -43,21 +43,35 @@
         <surName>De Frenne</surName>
       </individualName>
       <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
-      <electronicMailAddress>pieter.defrennee@ugent.be</electronicMailAddress>
+      <electronicMailAddress>pieter.defrenne@ugent.be</electronicMailAddress>
       <userId directory="https://orcid.org/">0000-0002-8613-0943</userId>
     </creator>
+    <metadataProvider>
+      <individualName>
+        <givenName>Sanne</givenName>
+        <surName>Govaert</surName>
+      </individualName>
+      <organizationName>Research Institute for Nature and Forest (INBO)</organizationName>
+      <electronicMailAddress>sanne.govaert@inbo.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-8939-1305</userId>
+    </metadataProvider>
+    <metadataProvider>
+      <individualName>
+        <givenName>Pieter</givenName>
+        <surName>Vangansbeke</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
+    </metadataProvider>
     <abstract>
-      <para>We focused on deciduous broadleaved forests in temperate Europe. Study sites are situated in typical European fragmented landscapes, with forest patches surrounded by a matrix of arable fields and grasslands. Forest stands were selected across nine regions along a latitudinal gradient from Italy to Norway to capture as much of the macroclimatic variation across Europe as possible. In the south, middle and north of this latitudinal gradient, more specifically in Italy, Belgium and Norway, an elevational gradient with three levels (low, medium and high) was included to capture macroclimatic variation caused by elevation. A total of 15 sites were thus selected: six regions without an elevational gradient and three regions with three levels of elevation.</para>
-      <para>The fforest stands had a minimal area of 4 ha, were mainly dominated by oaks (Quercus robur, Quercus petraea, and Quercus cerris), Fagus sylvatica, Betula pubescens, Populus tremula, Ulmus glabra, Alnus incana and Carpinus betulus. All sites had the same type of land-use history (ancient forest) and intermediate soil moisture (mesic).</para>
-      <para>At each site, three forest stands with different forest management were selected:</para>
-      <para>1. Unthinned: typically a dense forest, with a well-developed shrub layer, high basal area (mean ± SE was here 28.8 ± 1.5 m2/ha) and high canopy cover (openness 5.8 ± 0.6%, mean of three densitometer measurements), and not thinned for at least 10 years and mostly &gt;30 years) ago,</para>
-      <para>2. Thinned: intermediate to types one and three (openness 6.5 ± 0.6%, basal area 31.4 ± 1.9 m2/ha); even-aged and regularly thinned, but not recently (probably 5–10 years ago).</para>
-      <para>3. recently thinned:  open, even-aged and recently thinned forest (probably within 4 years of sampling), indicated by the presence of cut tree stumps, and characterized by the absence of a shrub and subdominant tree layer, with low basal area (21.6 ± 1.3 m2/ha) and low canopy cover (mean openness 14.8 ± 2.1%)</para>
-      <para>We established 100 m transects from the southern forest edge to the forest interior of each forest stand at each site. We thus established 45 transects in total (15 sites × 3 management types). The transect started at the hypothetical line of tree stems at the edge of the forest stand (0 m). These edges are outer edges, bordering a matrix of agricultural land and were created by ancient deforestations. The transect was installed perpendicular to the edge and at least 100 m from any another edge.</para>
-      <para>Along each transect, five 3 × 3 m2 quadrats were installed at an exponentially increasing distance from the forest edge because of the exponential change in microclimatic condition close to the edge, resulting in a total of 225 plots. The centres of the plots were thus at distances of 1.5, 4.5, 12.5, 35.5 and 99.5 m from the edge.</para>
-      <para>Vegetation surveys were conducted at the peak of vegetation biomass from May until early July 2018, depending on the regional phenology. All vascular plant species were identified and their percentage ground cover visually estimated by teams of two persons. The herb layer included all vascular species, both woody plants smaller than 1 m and non-woody plants, as well as lianas.</para>
-      <para>Plants were identified to the species level whenever possible and uncertain identifications were photographed and checked with specialists in the field.</para>
-      <para>For more information on the methodology (and the observed patterns along the edge to core gradients), see Govaert et al., 2019.</para>
+      <para>This is a vegetation survey dataset of ancient deciduous broadleaved forests in temperate Europe. It contains plot data of the herb layer collected in the framework of the Forest Microclimate Assessment (&lt;a href="https://formica.ugent.be/"&gt;FORMICA&lt;/a&gt;) project.  In total, 125 vegetation relevées of 3x3 m² were surveyed across four gradients:</para>
+      <para>1. Macroclimatic gradient from Italy to Norway</para>
+      <para>2. Elevational gradient</para>
+      <para>3. Gradient of management types (unthinned, thinned 5–10 years ago and recently thinned)</para>
+      <para>4. 100m edge-to-interior gradient</para>
+      <para>This study was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833).</para>
+      <para>For more information on the methodology (and the observed patterns along the edge to core gradients), see Govaert et al. (2019, &lt;a href="http://doi.org/10.1111/jvs.12844"&gt;http://doi.org/10.1111/jvs.12844&lt;/a&gt;).</para>
     </abstract>
     <keywordSet>
       <keyword>Occurrence</keyword>
@@ -85,14 +99,20 @@
         <boundingCoordinates/>
       </geographicCoverage>
       <temporalCoverage>
-        <rangeOfDates/>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2018-05-01</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2018-07-31</calendarDate>
+          </endDate>
+        </rangeOfDates>
       </temporalCoverage>
       <taxonomicCoverage>
         <taxonomicClassification>
           <taxonRankName>kingdom</taxonRankName>
           <taxonRankValue>Plantae</taxonRankValue>
         </taxonomicClassification>
-        <taxonomicDescription>All vascular plants (including woody species that are smaller than 1 m)</taxonomicDescription>
       </taxonomicCoverage>
     </coverage>
     <maintenance>
@@ -111,4 +131,15 @@
       <userId directory="https://orcid.org/">0000-0002-8939-1305</userId>
     </contact>
   </dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+        <bibliography>
+          <bibliography>
+            <citation>Govaert S, Meeussen C, Vanneste T, et al. Edge influence on understorey plant communities depends on forest management. J Veg Sci. 2020;00:1–12. doi.org/10.1111/jvs.12844</citation>
+          </bibliography>
+        </bibliography>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
 </eml:eml>
