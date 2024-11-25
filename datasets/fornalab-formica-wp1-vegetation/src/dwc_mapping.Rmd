@@ -107,7 +107,12 @@ taxonomic_coverage <- data.frame(
   taxonRank = "kingdom"
 )
 taxonomic_description <- "All vascular plants (including woody species that are smaller than 1 m."
-references <- c("Govaert S, Meeussen C, Vanneste T, et al. Edge influence on understorey plant communities depends on forest management. J Veg Sci. 2020;00:1–12. doi.org/10.1111/jvs.12844")
+references <- list(
+    list(
+    "identifier" = "doi.org/10.1111/jvs.12844",
+    "Govaert S, Meeussen C, Vanneste T, et al. Edge influence on understorey plant communities depends on forest management. J Veg Sci. 2020;00:1–12"
+    )
+  )
 ```
 
 # Create ID's
@@ -128,7 +133,7 @@ data_herb <-
   dplyr::mutate(
     event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
     parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":"),
-    occurrence_id = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", .data$Species_name_long)
+    occurrence_id = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", sub(" ", "_", .data$Species_name_long))
   ) %>% 
   dplyr::left_join(surveyors)
 coordinates <-  
@@ -332,10 +337,10 @@ eml$dataset$coverage$taxonomicCoverage <-
         )
       })
   )
-eml$dataset$coverage$taxonomicCoverage$taxonomicDescription <- taxonomic_description # does not work
+eml$dataset$coverage$taxonomicCoverage$generalTaxonomicCoverage <- taxonomic_description # does not work
 
 # Bibliographic citations
-eml$additionalMetadata$metadata$gbif$bibliography$bibliography$citation <- references # does not work
+eml$additionalMetadata$metadata$gbif$bibliography$citation <- references
 ```
 
 

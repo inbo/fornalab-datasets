@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="f9fcd834-2bcb-4e36-8893-972ae5d539f5" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="f6acd883-cdb6-4953-8a1f-5857b1fd1dab" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <title>FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
     <creator>
@@ -109,11 +109,11 @@
         </rangeOfDates>
       </temporalCoverage>
       <taxonomicCoverage>
+        <generalTaxonomicCoverage>All vascular plants (including woody species that are smaller than 1 m.</generalTaxonomicCoverage>
         <taxonomicClassification>
           <taxonRankName>kingdom</taxonRankName>
           <taxonRankValue>Plantae</taxonRankValue>
         </taxonomicClassification>
-        <taxonomicDescription>All vascular plants (including woody species that are smaller than 1 m.</taxonomicDescription>
       </taxonomicCoverage>
     </coverage>
     <maintenance>
@@ -136,9 +136,7 @@
     <metadata>
       <gbif>
         <bibliography>
-          <bibliography>
-            <citation>Govaert S, Meeussen C, Vanneste T, et al. Edge influence on understorey plant communities depends on forest management. J Veg Sci. 2020;00:1–12. doi.org/10.1111/jvs.12844</citation>
-          </bibliography>
+          <citation>Govaert S, Meeussen C, Vanneste T, et al. Edge influence on understorey plant communities depends on forest management. J Veg Sci. 2020;00:1–12<identifier>doi.org/10.1111/jvs.12844</identifier></citation>
         </bibliography>
       </gbif>
     </metadata>
