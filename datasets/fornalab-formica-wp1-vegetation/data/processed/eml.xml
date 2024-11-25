@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="cec95a70-b5c0-4db6-9ede-91ae712ff69d" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+  <dataset>
+    <title>Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the FORMICA project</title>
+    <creator>
+      <individualName>
+        <givenName>Sanne</givenName>
+        <surName>Govaert</surName>
+      </individualName>
+      <organizationName>Research Institute for Nature and Forest (INBO)</organizationName>
+      <electronicMailAddress>sanne.govaert@inbo.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-8939-1305</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Pieter</givenName>
+        <surName>Vangansbeke</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Camille</givenName>
+        <surName>Meeussen</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <userId directory="https://orcid.org/">0000-0002-5869-4936</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Thomas</givenName>
+        <surName>Vanneste</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>thomas.vanneste@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0001-5296-917X</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Pieter</givenName>
+        <surName>De Frenne</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>pieter.defrennee@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-8613-0943</userId>
+    </creator>
+    <abstract>
+      <para>We focused on deciduous broadleaved forests in temperate Europe. Study sites are situated in typical European fragmented landscapes, with forest patches surrounded by a matrix of arable fields and grasslands. Forest stands were selected across nine regions along a latitudinal gradient from Italy to Norway to capture as much of the macroclimatic variation across Europe as possible. In the south, middle and north of this latitudinal gradient, more specifically in Italy, Belgium and Norway, an elevational gradient with three levels (low, medium and high) was included to capture macroclimatic variation caused by elevation. A total of 15 sites were thus selected: six regions without an elevational gradient and three regions with three levels of elevation.</para>
+      <para>The fforest stands had a minimal area of 4 ha, were mainly dominated by oaks (Quercus robur, Quercus petraea, and Quercus cerris), Fagus sylvatica, Betula pubescens, Populus tremula, Ulmus glabra, Alnus incana and Carpinus betulus. All sites had the same type of land-use history (ancient forest) and intermediate soil moisture (mesic).</para>
+      <para>At each site, three forest stands with different forest management were selected:</para>
+      <para>1. Unthinned: typically a dense forest, with a well-developed shrub layer, high basal area (mean ± SE was here 28.8 ± 1.5 m2/ha) and high canopy cover (openness 5.8 ± 0.6%, mean of three densitometer measurements), and not thinned for at least 10 years and mostly &gt;30 years) ago,</para>
+      <para>2. Thinned: intermediate to types one and three (openness 6.5 ± 0.6%, basal area 31.4 ± 1.9 m2/ha); even-aged and regularly thinned, but not recently (probably 5–10 years ago).</para>
+      <para>3. recently thinned:  open, even-aged and recently thinned forest (probably within 4 years of sampling), indicated by the presence of cut tree stumps, and characterized by the absence of a shrub and subdominant tree layer, with low basal area (21.6 ± 1.3 m2/ha) and low canopy cover (mean openness 14.8 ± 2.1%)</para>
+      <para>We established 100 m transects from the southern forest edge to the forest interior of each forest stand at each site. We thus established 45 transects in total (15 sites × 3 management types). The transect started at the hypothetical line of tree stems at the edge of the forest stand (0 m). These edges are outer edges, bordering a matrix of agricultural land and were created by ancient deforestations. The transect was installed perpendicular to the edge and at least 100 m from any another edge.</para>
+      <para>Along each transect, five 3 × 3 m2 quadrats were installed at an exponentially increasing distance from the forest edge because of the exponential change in microclimatic condition close to the edge, resulting in a total of 225 plots. The centres of the plots were thus at distances of 1.5, 4.5, 12.5, 35.5 and 99.5 m from the edge.</para>
+      <para>Vegetation surveys were conducted at the peak of vegetation biomass from May until early July 2018, depending on the regional phenology. All vascular plant species were identified and their percentage ground cover visually estimated by teams of two persons. The herb layer included all vascular species, both woody plants smaller than 1 m and non-woody plants, as well as lianas.</para>
+      <para>Plants were identified to the species level whenever possible and uncertain identifications were photographed and checked with specialists in the field.</para>
+      <para>For more information on the methodology (and the observed patterns along the edge to core gradients), see Govaert et al., 2019.</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Occurrence</keyword>
+      <keywordThesaurus>GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Observation</keyword>
+      <keywordThesaurus>GBIF Dataset Subtype Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>vascular plants</keyword>
+      <keyword>understorey herbs</keyword>
+      <keyword>vegetation survey</keyword>
+      <keyword>forest edges</keyword>
+      <keyword>temperate forests</keyword>
+      <keyword>forest structure</keyword>
+      <keywordThesaurus>n/a</keywordThesaurus>
+    </keywordSet>
+    <intellectualRights>
+      <para>cc0-1.0</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Europe</geographicDescription>
+        <boundingCoordinates/>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates/>
+      </temporalCoverage>
+      <taxonomicCoverage>
+        <taxonomicClassification>
+          <taxonRankName>kingdom</taxonRankName>
+          <taxonRankValue>Plantae</taxonRankValue>
+        </taxonomicClassification>
+        <taxonomicDescription>All vascular plants (including woody species that are smaller than 1 m)</taxonomicDescription>
+      </taxonomicCoverage>
+    </coverage>
+    <maintenance>
+      <description>
+        <para/>
+      </description>
+      <maintenanceUpdateFrequency>Not planned</maintenanceUpdateFrequency>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Sanne</givenName>
+        <surName>Govaert</surName>
+      </individualName>
+      <organizationName>Research Institute for Nature and Forest (INBO)</organizationName>
+      <electronicMailAddress>sanne.govaert@inbo.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-8939-1305</userId>
+    </contact>
+  </dataset>
+</eml:eml>
