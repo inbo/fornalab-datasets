@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="5e30f1a3-3325-4297-af5a-1ad44bac6a07" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="e2a95426-d98a-46b9-82b3-178875162f13" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
-    <title>Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
+    <title>FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
     <creator>
       <individualName>
         <givenName>Sanne</givenName>
@@ -113,6 +113,7 @@
           <taxonRankName>kingdom</taxonRankName>
           <taxonRankValue>Plantae</taxonRankValue>
         </taxonomicClassification>
+        <taxonomicDescription>All vascular plants (including woody species that are smaller than 1 m.</taxonomicDescription>
       </taxonomicCoverage>
     </coverage>
     <maintenance>
