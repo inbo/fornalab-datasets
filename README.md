@@ -17,14 +17,11 @@ The structure for each dataset in [datasets](datasets) is based on [Cookiecutter
 ```
 ├── data
 │   ├── raw                  : Source data, input for mapping script
-│   ├── interim              : Derived data for verification GENERATED
 │   └── processed            : Darwin Core output of mapping script GENERATED
 │
-├── src
-│   └── dwc_mapping.Rmd      : Darwin Core mapping script
-│
-└── specs
-    └── dwc_occurrences.yaml : Whip specifications for validation
+└── src
+    └── dwc_mapping.Rmd      : Darwin Core mapping script
+
 ```
 
 ## Contributors
