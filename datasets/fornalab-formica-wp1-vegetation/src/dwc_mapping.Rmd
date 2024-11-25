@@ -26,12 +26,13 @@ library(EML)
 directory <- here::here("datasets", "fornalab-formica-wp1-vegetation", "data")
 raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Herb")
 raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Plot characteristics")
+raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version36.xlsx"), sheet = "Digitalization info")
 ```
 # Provide metadata
 
 ```{r basic metadata}
 shortname <- "FORMICA_VEG"
-title <- "Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
+title <- "FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
 description <- c(
   "This is a vegetation survey dataset of ancient deciduous broadleaved forests in temperate Europe. It contains plot data of the herb layer collected in the framework of the Forest Microclimate Assessment (<a href=\"https://formica.ugent.be/\">FORMICA</a>) project.  In total, 125 vegetation relevées of 3x3 m² were surveyed across four gradients:",
 "1. Macroclimatic gradient from Italy to Norway",
@@ -112,11 +113,9 @@ references <- c("Govaert S, Meeussen C, Vanneste T, et al. Edge influence on und
 # Create ID's
 
 ```{r}
-vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
 data_plot <-
   raw_data_plot %>%
   dplyr::mutate(
-    Code = paste0(.data$Region, .data$Elevation, .data$Type, .data$Plot),
     event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
     parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":")
   )
@@ -124,8 +123,18 @@ data_herb <-
   raw_data_herb %>% 
   dplyr::mutate(
     event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
-    parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":")
+    parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":"),
+    occurrence_id = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", .data$Species_name_long)
   )
+
+coordinates <-  
+  data_herb %>% 
+    select(event_id, Latitude, Longitude) %>% 
+    distinct()
+
+data_plot <-
+  data_plot %>% 
+  left_join(coordinates)
 ```
 
 # Darwin core transformation
@@ -141,10 +150,10 @@ event <-
     rightsHolder = publisher,
     datasetID = "", # doi of published dataset
     institutionCode = "UGent", 
-    datasetName = paste(shortname, "-", title),
+    datasetName = title,
     eventID = .data$event_id,
     parentEventID = .data$parent_event_id,
-    eventDate = .data$Date,
+    #eventDate = .data$Date,
     samplesizeValue = 9,
     sampleSizeUnit = "m2",
     habitat = "temperate forest",
@@ -161,14 +170,14 @@ event <-
       "NO" = "Norway",
       "IT" = "Italy"
       ),
-    decimalLatitude = .data$LAT,
-    decimalLongitude = .data$LON,
+    decimalLatitude = .data$Latitude,
+    decimalLongitude = .data$Longitude,
     geodeticDatum = "EPSG:4326",
     coordinateUncertaintyInMeters = 30,
   )
 
 occurrence <-
-  raw_data_herb %>% 
+  data_herb %>% 
   mutate(
     .keep = "none",
     language = data_language,
@@ -176,16 +185,15 @@ occurrence <-
     license = data_license, 
     rightsHolder = publisher,
     datasetID = "", # doi of published dataset
-    datasetName = paste(shortname, "-", title),
+    datasetName = title,
     basisOfRecord = "HumanObservation",
     collectionCode = "FORMICA",
-    occurrenceID = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", .data$Species_name_long), # Nog aan te passen
+    occurrenceID = .data$occurrence_id,
     #recorderdedBy = "x",
     organismQuantity = .data$Cover,
-    organismQuantityType = "% cover",
+    organismQuantityType = "% coverage of herb layer",
     occurrenceStatus = "present",
-    eventID = .data$Code, # Plot
-    parentEventID = substr(.data$Code, 1, 6), # Transect
+    eventID = .data$event_id, 
     scientificName = .data$Species_name_long,
     kingdom = "Plantae",
     taxonRank = dplyr::if_else(
@@ -196,13 +204,11 @@ occurrence <-
   )
 
 releve <- 
-  raw_data_plot %>%
+  data_plot %>%
   dplyr::mutate(
-    Code = paste0(.data$Region, .data$Elevation, .data$Type, .data$Plot)
-  ) %>% 
-  dplyr::mutate(
-    id = .data$Code,
-    poject = "FORMICA (Forest Microclimate Assessment)",
+    .keep = "none",
+    eventID = .data$event_id,
+    project = "FORMICA (Forest Microclimate Assessment)",
     coverTotalInPercentage = .data$Total_cover,
     coverTreesInPercentage = .data$Tree_cover,
     coverShrubsInPercentage	= .data$Shrub_cover,
@@ -275,7 +281,7 @@ eml$dataset$maintenance <- list(
 eml$dataset$creator <- create_eml_contributors(creators)
 
 # Set contacts
-eml$dataset$contact <- create_eml_contributors
+eml$dataset$contact <- create_eml_contributors(contact)
 
 # Set metadata providers
 eml$dataset$metadataProvider <- create_eml_contributors(metadata_provider)
