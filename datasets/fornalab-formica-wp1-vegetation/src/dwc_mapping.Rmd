@@ -99,8 +99,8 @@ creators <- list(
 metadata_provider <- purrr::keep(creators, ~ .x$title %in% c("Sanne Govaert", "Pieter Vangansbeke"))
 contact <- purrr::keep(creators, ~ .x$title == "Sanne Govaert")
 keywords <- c("vascular plants", "understorey herbs", "vegetation survey", "forest edges", "temperate forests", "forest structure")
-begin_date <- "2018-05-01"
-end_date <- "2018-07-31"
+begin_date <-  min(raw_data_digitalization$Date_of_survey)
+end_date <- max(raw_data_digitalization$Date_of_survey)
 geographic_description <- "Europe"
 taxonomic_coverage <- data.frame(
   scientificName = "Plantae",
@@ -115,26 +115,29 @@ references <- c("Govaert S, Meeussen C, Vanneste T, et al. Edge influence on und
 ```{r}
 data_plot <-
   raw_data_plot %>%
+  dplyr::left_join(raw_data_digitalization) %>% 
   dplyr::mutate(
     event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
     parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":")
   )
+surveyors <- 
+  data_plot %>% 
+  dplyr::select(event_id, Surveyors)
 data_herb <- 
   raw_data_herb %>% 
   dplyr::mutate(
     event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
     parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":"),
     occurrence_id = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", .data$Species_name_long)
-  )
-
+  ) %>% 
+  dplyr::left_join(surveyors)
 coordinates <-  
   data_herb %>% 
-    select(event_id, Latitude, Longitude) %>% 
-    distinct()
-
+    dplyr::select(event_id, Latitude, Longitude) %>% 
+    dplyr::distinct()
 data_plot <-
   data_plot %>% 
-  left_join(coordinates)
+  dplyr::left_join(coordinates)
 ```
 
 # Darwin core transformation
@@ -153,7 +156,7 @@ event <-
     datasetName = title,
     eventID = .data$event_id,
     parentEventID = .data$parent_event_id,
-    #eventDate = .data$Date,
+    eventDate = .data$Date_of_survey,
     samplesizeValue = 9,
     sampleSizeUnit = "m2",
     habitat = "temperate forest",
@@ -189,7 +192,7 @@ occurrence <-
     basisOfRecord = "HumanObservation",
     collectionCode = "FORMICA",
     occurrenceID = .data$occurrence_id,
-    #recorderdedBy = "x",
+    recorderdedBy = .data$Surveyors,
     organismQuantity = .data$Cover,
     organismQuantityType = "% coverage of herb layer",
     occurrenceStatus = "present",
@@ -332,10 +335,10 @@ eml$dataset$coverage$taxonomicCoverage <-
         )
       })
   )
-eml$dataset$coverage$taxonomicCoverage$taxonomicDescription <- taxonomic_description
+eml$dataset$coverage$taxonomicCoverage$taxonomicDescription <- taxonomic_description # does not work
 
 # Bibliographic citations
-eml$additionalMetadata$metadata$gbif$bibliography$bibliography$citation <- references
+eml$additionalMetadata$metadata$gbif$bibliography$bibliography$citation <- references # does not work
 ```
 
 
