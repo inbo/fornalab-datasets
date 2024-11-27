@@ -107,12 +107,7 @@ taxonomic_coverage <- data.frame(
   taxonRank = "kingdom"
 )
 taxonomic_description <- "All vascular plants (including woody species that are smaller than 1 m."
-references <- list(
-    list(
-    "identifier" = "doi.org/10.1111/jvs.12844",
-    "Govaert S, Meeussen C, Vanneste T, et al. Edge influence on understorey plant communities depends on forest management. J Veg Sci. 2020;00:1–12"
-    )
-  )
+references <- list(list("Govaert S, Meeussen C, Vanneste T, et al. (2019). Edge influence on understorey plant communities depends on forest management. Journal of Vegetation Science. 2020;31:281–292. doi.org/10.1111/jvs.12844"))
 ```
 
 # Create ID's and join data frames

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="879da71e-81ad-4c97-95d0-4fab960521cb" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="a2320189-9bd0-4eed-95c6-7b5cc98cf031" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <title>FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
     <creator>
@@ -132,7 +132,7 @@
     <metadata>
       <gbif>
         <bibliography>
-          <citation>Govaert S, Meeussen C, Vanneste T, et al. Edge influence on understorey plant communities depends on forest management. J Veg Sci. 2020;00:1–12<identifier>doi.org/10.1111/jvs.12844</identifier></citation>
+          <citation>Govaert S, Meeussen C, Vanneste T, et al. (2019). Edge influence on understorey plant communities depends on forest management. Journal of Vegetation Science. 2020;31:281–292. doi.org/10.1111/jvs.12844</citation>
         </bibliography>
       </gbif>
     </metadata>
