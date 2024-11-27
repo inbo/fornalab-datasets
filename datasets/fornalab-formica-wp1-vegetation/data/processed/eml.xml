@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="a2320189-9bd0-4eed-95c6-7b5cc98cf031" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="fe7d7f0e-0d75-495e-ae11-4bcd8484d66c" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
+    <shortName>FORMICA_VEG</shortName>
     <title>FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
     <creator>
       <individualName>
@@ -116,7 +117,7 @@
       <description>
         <para/>
       </description>
-      <maintenanceUpdateFrequency>Not planned</maintenanceUpdateFrequency>
+      <maintenanceUpdateFrequency>notPlanned</maintenanceUpdateFrequency>
     </maintenance>
     <contact>
       <individualName>
