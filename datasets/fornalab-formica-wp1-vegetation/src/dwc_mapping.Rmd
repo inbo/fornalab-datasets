@@ -28,6 +28,7 @@ raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_vers
 raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Plot characteristics")
 raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Digitalization info")
 ```
+
 # Provide metadata
 
 ```{r basic metadata}
@@ -42,7 +43,6 @@ description <- c(
 "For more information on the methodology (and the observed patterns along the edge to core gradients), see Govaert et al. (2019, <a href=\"http://doi.org/10.1111/jvs.12844\">http://doi.org/10.1111/jvs.12844</a>)."
 )
 ```
-
 
 ```{r metadata}
 publisher <- "Ghent University"
@@ -113,7 +113,7 @@ references <- list(
   )
 ```
 
-# Create ID's
+# Create ID's and join data frames
 
 ```{r}
 data_plot <-
@@ -123,17 +123,14 @@ data_plot <-
     event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
     parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":")
   )
-surveyors <- 
-  data_plot %>% 
-  dplyr::select(event_id, Surveyors)
+
 data_herb <- 
   raw_data_herb %>% 
   dplyr::mutate(
     event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
     parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":"),
     occurrence_id = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", sub(" ", "_", .data$Species_name_long))
-  ) %>% 
-  dplyr::left_join(surveyors)
+  ) 
 coordinates <-  
   data_herb %>% 
     dplyr::select(event_id, Latitude, Longitude) %>% 
@@ -141,6 +138,9 @@ coordinates <-
 data_plot <-
   data_plot %>% 
   dplyr::left_join(coordinates)
+```
+```{r}
+
 ```
 
 # Darwin core transformation
@@ -195,7 +195,6 @@ occurrence <-
     basisOfRecord = "HumanObservation",
     collectionCode = "FORMICA",
     occurrenceID = .data$occurrence_id,
-    recorderdedBy = .data$Surveyors, # not mapped
     organismQuantity = .data$Cover,
     organismQuantityType = "% coverage of herb layer",
     occurrenceStatus = "present",
