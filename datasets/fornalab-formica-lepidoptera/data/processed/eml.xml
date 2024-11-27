@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="decd0e8f-d9b7-49ae-baf5-7a04f7c9e39d" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+  <dataset>
+    <shortName>FORMICA_LEPIDOPTERA</shortName>
+    <title>FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the FORMICA project</title>
+    <creator>
+      <individualName>
+        <givenName>Pieter</givenName>
+        <surName>Vangansbeke</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Pallieter</givenName>
+        <surName>De Smedt</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>pallieter.desmedt@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-3073-6751</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Cyr</givenName>
+        <surName>Mestdagh</surName>
+      </individualName>
+      <organizationName>Natuurpunt</organizationName>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Pieter</givenName>
+        <surName>De Frenne</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>pieter.defrenne@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-8613-0943</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Sanne</givenName>
+        <surName>Govaert</surName>
+      </individualName>
+      <organizationName>Research Institute for Nature and Forest (INBO)</organizationName>
+      <electronicMailAddress>sanne.govaert@inbo.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-8939-1305</userId>
+    </creator>
+    <metadataProvider>
+      <individualName>
+        <givenName>Pieter</givenName>
+        <surName>Vangansbeke</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
+    </metadataProvider>
+    <metadataProvider>
+      <individualName>
+        <givenName>Sanne</givenName>
+        <surName>Govaert</surName>
+      </individualName>
+      <organizationName>Research Institute for Nature and Forest (INBO)</organizationName>
+      <electronicMailAddress>sanne.govaert@inbo.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-8939-1305</userId>
+    </metadataProvider>
+    <abstract>
+      <para>FORMICA_LEPIDOPTERA is a sampling event dataset published by Ghent University. It contains information on 128 sampling events with 1595 validated occurrences of macro-moths in 2020. These data were gathered as part of the research conducted by Vangansebeke et al. (in preparation).
+Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues
+We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.
+This sampling took place in the framework of the FORMICA project (www.formica.ugent.be) and was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO).</para>
+    </abstract>
+    <keywordSet>
+      <keyword>Samplingevent</keyword>
+      <keywordThesaurus>GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Lepidoptera</keyword>
+      <keyword>macromoths</keyword>
+      <keyword>forest edges</keyword>
+      <keyword>temperate forests</keyword>
+      <keyword>forest structure</keyword>
+      <keywordThesaurus>n/a</keywordThesaurus>
+    </keywordSet>
+    <intellectualRights>
+      <para>cc0-1.0</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Temperate forests in Belgium and Northern-France</geographicDescription>
+        <boundingCoordinates/>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2020-06-17</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2020-10-23</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+      <taxonomicCoverage>
+        <generalTaxonomicCoverage>The sampling focus for this dataset is macro-moths, i.e., some families of generally larger sized lepidoptera such as noctuidae and geometridae.</generalTaxonomicCoverage>
+        <taxonomicClassification>
+          <taxonRankName>order</taxonRankName>
+          <taxonRankValue>Lepidoptera</taxonRankValue>
+        </taxonomicClassification>
+      </taxonomicCoverage>
+    </coverage>
+    <maintenance>
+      <description>
+        <para/>
+      </description>
+      <maintenanceUpdateFrequency>notPlanned</maintenanceUpdateFrequency>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Pieter</givenName>
+        <surName>Vangansbeke</surName>
+      </individualName>
+      <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
+      <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
+      <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
+    </contact>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif/>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>
