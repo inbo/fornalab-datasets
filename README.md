@@ -1,4 +1,4 @@
-# ForNaLab occurrence datasets
+# ForNaLab datasets
 
 ## Rationale
 
@@ -8,7 +8,7 @@ This repository contains the functionality to standardize several datasets of th
 
 Title (and GitHub directory) | IPT | GBIF
 --- | --- | ---
-NA | NA | NA
+FORMICA_VEG | NA | NA
 
 ## Repo structure
 
