@@ -37,7 +37,7 @@ raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation s
 short_name <- "FORMICA_VEG"
 title <- "FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
 description <- c(
-  "This is a vegetation survey dataset of ancient deciduous broadleaved forests in temperate Europe. It contains plot data of the herb layer collected in the framework of the Forest Microclimate Assessment (<a href=\"https://formica.ugent.be/\">FORMICA</a>) project.  In total, 125 vegetation relevées of 3x3 m² were surveyed across four gradients:",
+  "This is a vegetation survey dataset of ancient deciduous broadleaved forests in temperate Europe. It contains plot data of the herb, shrub and tree layer collected in the framework of the Forest Microclimate Assessment (<a href=\"https://formica.ugent.be/\">FORMICA</a>) project.  In total, 125 vegetation relevées of 3x3 m² were surveyed across four gradients:",
 "1. Macroclimatic gradient from Italy to Norway",
 "2. Elevational gradient",
 "3. Gradient of management types (unthinned, thinned 5–10 years ago and recently thinned)",
@@ -107,7 +107,7 @@ taxonomic_coverage <- data.frame(
   scientificName = "Plantae",
   taxonRank = "kingdom"
 )
-taxonomic_description <- "All vascular plants (including woody species that are smaller than 1 m."
+taxonomic_description <- "All vascular plants. The herb layer included all vascular species, both woody plants smaller than 1 m and non-woody plants, as well as lianas. The shrub layer was defined as all woody species with a height between 1 and 7 m and the tree layer as all trees reaching heights more than 7 m. Corylus avellana was always classified into the shrub layer, regardless of its height."
 references <- list(list("Govaert S, Meeussen C, Vanneste T, et al. (2019). Edge influence on understorey plant communities depends on forest management. Journal of Vegetation Science. 2020;31:281–292. doi.org/10.1111/jvs.12844"))
 ```
 
