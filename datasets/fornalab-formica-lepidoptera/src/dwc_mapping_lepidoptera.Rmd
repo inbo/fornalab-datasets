@@ -1,0 +1,292 @@
+---
+title: "Darwin Core Mapping"
+subtitle: "Lepidoptera survey data from FORMICA"
+author: "Sanne Govaert"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
+```
+
+Load libraries:
+
+```{r message = FALSE}
+library(readxl)
+library(dplyr)
+library(here)
+library(digest)        
+library(EML)
+```
+
+# Read source data
+
+```{r}
+directory <- here::here("datasets", "fornalab-formica-lepidoptera", "data")
+raw_data <- read_excel(here::here(directory, "raw", "Raw moth sampling data.xlsx"), sheet = "Data")
+```
+
+# Provide metadata
+
+```{r basic metadata}
+short_name <- "FORMICA_LEPIDOPTERA"
+title <- "FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the FORMICA project"
+description <- c(
+  "FORMICA_LEPIDOPTERA is a sampling event dataset published by Ghent University. It contains information on 128 sampling events with 1595 validated occurrences of macro-moths in 2020. These data were gathered as part of the research conducted by Vangansebeke et al. (in preparation).
+Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues
+We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.
+This sampling took place in the framework of the FORMICA project (www.formica.ugent.be) and was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO)."
+)
+```
+
+```{r metadata}
+publisher <- "Ghent University"
+update_frequency <- "notPlanned"
+type <- "Samplingevent"
+metadata_language <- "en"
+data_language <- "en"
+data_license <- "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
+metadata_license <- "cc0-1.0"
+creators <- list(
+  list(
+    title = "Pieter Vangansbeke",
+    email = "pieter.vangansbeke@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Pieter",
+    last_name = "Vangansbeke",
+    orcid = "0000-0002-6356-2858"
+  ),
+  list(
+    title = "Pallieter De Smedt",
+    email = "pallieter.desmedt@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Pallieter",
+    last_name = "De Smedt",
+    orcid = "0000-0002-3073-6751"
+  ),
+  list(
+    title = "Cyr Mestdagh",
+    email = NA_character_,
+    organization = "Natuurpunt",
+    first_name = "Cyr",
+    last_name = "Mestdagh",
+    orcid = NA_integer_
+  ),
+  list(
+    title = "Pieter De Frenne",
+    email = "pieter.defrenne@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Pieter",
+    last_name = "De Frenne",
+    orcid = "0000-0002-8613-0943"
+  ),
+  list(
+    title = "Sanne Govaert",
+    email = "sanne.govaert@inbo.be",
+    organization = "Research Institute for Nature and Forest (INBO)",
+    first_name = "Sanne",
+    last_name = "Govaert",
+    orcid = "0000-0002-8939-1305"
+  )
+)
+metadata_provider <- purrr::keep(creators, ~ .x$title %in% c("Pieter Vangansbeke", "Sanne Govaert"))
+contact <- purrr::keep(creators, ~ .x$title == "Pieter Vangansbeke")
+keywords <- c("Lepidoptera", "macromoths", "forest edges", "temperate forests", "forest structure")
+begin_date <-  min(raw_data$Date)
+end_date <- max(raw_data$Date)
+geographic_description <- "Temperate forests in Belgium and Northern-France"
+taxonomic_coverage <- data.frame(
+  scientificName = "Lepidoptera",
+  taxonRank = "order"
+)
+taxonomic_description <- "The sampling focus for this dataset is macro-moths, i.e., some families of generally larger sized lepidoptera such as noctuidae and geometridae."
+references <- list(list(NA))
+```
+
+# Create ID's and join data frames
+
+```{r}
+my_data <-
+  raw_data %>%
+  dplyr::mutate(
+    transect = toupper(Transect),
+    code = toupper(fullplotID),
+    event_id = paste("FORMICA_LEPIDOPTERA", "PLOT", .data$code, Period, sep = ":"),
+    parent_event_id = paste("FORMICA", "TRANSECT", substr(.data$code, 1, 6), sep = ":"),
+    occurrence_id = paste("UGENT:FORMICA", .data$code, Period, "LEPIODOPTERA", sub(" ", "_", .data$`Species (Scientific name)`), sep = ":")
+  )
+```
+
+# Darwin core transformation
+
+```{r dwc transformation}
+event <- 
+  my_data %>% 
+  dplyr::mutate(
+    .keep = "none",
+    type = "Event",
+    language = data_language,
+    license = data_license, 
+    rightsHolder = publisher,
+    datasetID = "", # doi of published dataset
+    institutionCode = "UGent", 
+    datasetName = title,
+    eventID = .data$event_id,
+    parentEventID = .data$parent_event_id,
+    eventDate = .data$Date,
+    habitat = "temperate forest",
+    samplingProtocol = "light trapping",
+    country = dplyr::if_else(
+      startsWith(.data$transect, "B"),
+      "Belgium",
+      "France"
+      ),
+    decimalLatitude = .data$LAT,
+    decimalLongitude = .data$LON,
+    geodeticDatum = "EPSG:4326",
+    coordinateUncertaintyInMeters = 30,
+    eventRemarks = .data$`Remarks (Wind, rain, moon, cloudiness)`
+  ) %>% 
+  dplyr::distinct()
+
+occurrence <-
+  my_data %>% 
+  dplyr::mutate(
+    .keep = "none",
+    language = data_language,
+    type = "Event",
+    license = data_license, 
+    rightsHolder = publisher,
+    datasetID = "", # doi of published dataset
+    datasetName = title,
+    basisOfRecord = "HumanObservation",
+    collectionCode = "FORMICA",
+    occurrenceID = .data$occurrence_id,
+    organismQuantity = .data$Amount,
+    organismQuantityType = "individuals",
+    occurrenceStatus = "present",
+    eventID = .data$event_id, 
+    scientificName = .data$`Species (Scientific name)`,
+    kingdom = "Animalia",
+    taxonRank = dplyr::if_else(
+      grepl("subsp.", .data$`Species (Scientific name)`, fixed = TRUE), 
+      "subspecies",
+      "species"
+    )
+  )
+```
+
+## Write darwin core
+
+```{r write dwc}
+dir_export <- here::here(directory, "processed")
+ if (!dir.exists(dir_export)) {
+    dir.create(dir_export, recursive = TRUE)
+  }
+readr::write_csv(event, here::here(dir_export, "event.csv"), na = "")
+readr::write_csv(occurrence, here::here(dir_export, "occurrence.csv"), na = "")
+```
+
+# Create metadata file (eml.xml)
+
+## Function to create contributors in EML format
+
+```{r}
+create_eml_contributors <- function(contributor_list) {
+  purrr::map(contributor_list, ~ EML::set_responsibleParty(
+    givenName = .$first_name,
+    surName = .$last_name,
+    organizationName = .$organization, # Discouraged by EML, but used by IPT
+    email = .$email,
+    userId = if (!is.na(.$orcid)) {
+      list(directory = "https://orcid.org/", .$orcid)
+    } else {
+      NULL
+    }
+  ))
+}
+```
+
+This script is based on input data above.
+
+```{r EML transformation}
+# Initiate EML
+eml <- list(
+  packageId = uuid::UUIDgenerate(),
+  system = "uuid",
+  dataset = list()
+)
+
+# Set short name and title
+eml$dataset$shortName <- short_name
+eml$dataset$title <- title
+
+# Set abstract
+eml$dataset$abstract$para <- description
+
+# Set update frequency (requires a description, even if empty)
+eml$dataset$maintenance <- list(
+  description = list(para = ""),
+  maintenanceUpdateFrequency = update_frequency
+)
+
+# Set creators
+eml$dataset$creator <- create_eml_contributors(creators)
+
+# Set contacts
+eml$dataset$contact <- create_eml_contributors(contact)
+
+# Set metadata providers
+eml$dataset$metadataProvider <- create_eml_contributors(metadata_provider)
+
+# Set keywords
+eml$dataset$keywordSet <-
+  list(
+    list(
+      keywordThesaurus = paste(
+        "GBIF Dataset Type Vocabulary:",
+        "http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml"
+      ),
+      keyword = type
+    ),
+    list(
+      keywordThesaurus = "n/a",
+      keyword = keywords
+    )
+  )
+
+# Set license
+eml$dataset$intellectualRights$para <- metadata_license
+
+# Set temporal coverage and geographicDescription
+eml$dataset$coverage <-
+  EML::set_coverage(
+    beginDate = begin_date,
+    endDate = end_date,
+    geographicDescription = geographic_description
+  )
+
+# Set taxonomic coverage
+eml$dataset$coverage$taxonomicCoverage <-
+  list(
+    taxonomicClassification =
+      purrr::map(1:nrow(taxonomic_coverage), function(i) {
+        current_row <- taxonomic_coverage[i, ]
+        list(
+          taxonRankName = current_row$taxonRank,
+          taxonRankValue = current_row$scientificName
+        )
+      })
+  )
+eml$dataset$coverage$taxonomicCoverage$generalTaxonomicCoverage <- taxonomic_description # does not work
+
+# Bibliographic citations
+eml$additionalMetadata$metadata$gbif$bibliography$citation <- references
+```
+
+
+```{r write EML}
+EML::write_eml(eml, here::here(dir_export, "eml.xml"))
+```
+
