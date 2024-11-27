@@ -31,7 +31,6 @@ raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation s
 # Provide metadata
 
 ```{r basic metadata}
-shortname <- "FORMICA_VEG"
 title <- "FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
 description <- c(
   "This is a vegetation survey dataset of ancient deciduous broadleaved forests in temperate Europe. It contains plot data of the herb layer collected in the framework of the Forest Microclimate Assessment (<a href=\"https://formica.ugent.be/\">FORMICA</a>) project.  In total, 125 vegetation relevées of 3x3 m² were surveyed across four gradients:",
@@ -48,8 +47,7 @@ description <- c(
 ```{r metadata}
 publisher <- "Ghent University"
 update_frequency <- "Not planned"
-type <- "occurrence"
-subtype <- "observation"
+type <- "Samplingevent"
 metadata_language <- "en"
 data_language <- "en"
 data_license <- "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
@@ -299,14 +297,7 @@ eml$dataset$keywordSet <-
         "GBIF Dataset Type Vocabulary:",
         "http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml"
       ),
-      keyword = "Occurrence"
-    ),
-    list(
-      keywordThesaurus = paste(
-        "GBIF Dataset Subtype Vocabulary:",
-        "http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml"
-      ),
-      keyword = "Observation"
+      keyword = type
     ),
     list(
       keywordThesaurus = "n/a",
