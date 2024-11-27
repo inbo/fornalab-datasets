@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="fe7d7f0e-0d75-495e-ae11-4bcd8484d66c" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="978c2852-2ea7-4e6a-bf5e-56e99b9d0ba0" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <shortName>FORMICA_VEG</shortName>
     <title>FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
@@ -66,13 +66,9 @@
       <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
     </metadataProvider>
     <abstract>
-      <para>This is a vegetation survey dataset of ancient deciduous broadleaved forests in temperate Europe. It contains plot data of the herb layer collected in the framework of the Forest Microclimate Assessment (&lt;a href="https://formica.ugent.be/"&gt;FORMICA&lt;/a&gt;) project.  In total, 125 vegetation relevées of 3x3 m² were surveyed across four gradients:</para>
-      <para>1. Macroclimatic gradient from Italy to Norway</para>
-      <para>2. Elevational gradient</para>
-      <para>3. Gradient of management types (unthinned, thinned 5–10 years ago and recently thinned)</para>
-      <para>4. 100m edge-to-interior gradient</para>
-      <para>This study was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833).</para>
-      <para>For more information on the methodology (and the observed patterns along the edge to core gradients), see Govaert et al. (2019, &lt;a href="http://doi.org/10.1111/jvs.12844"&gt;http://doi.org/10.1111/jvs.12844&lt;/a&gt;).</para>
+      <para><i>FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</i> is a sampling event dataset published by Ghent University. It contains information on 125 sampling events (vegetation relevées of 3 x 3 m²) with 4159 validated occurrences of vascular plants in ancient deciduous broadleaved forests in temperate Europe. These data were collected to study understorey vegetation biodiversity and composition responses to distance to the forest edge in ancient forest stands with different management types in 45 edge-to-interior forest transects across Europe (Govaert et al., 2019, <a href="http://doi.org/10.1111/jvs.12844">http://doi.org/10.1111/jvs.12844</a>). The aim was to disentangle the effects of the management type and the distance to the edge on alpha diversity of understorey plants in multiple European regions, while accounting for environmental characteristics. Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues.</para>
+      <para>We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata or via opendata@inbo.be.</para>
+      <para>This sampling took place in the framework of the FORMICA project (&lt;a href="https://formica.ugent.be/"&gt;FORMICA&lt;/a&gt;) and was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO).</para>
     </abstract>
     <keywordSet>
       <keyword>Samplingevent</keyword>
@@ -106,7 +102,7 @@
         </rangeOfDates>
       </temporalCoverage>
       <taxonomicCoverage>
-        <generalTaxonomicCoverage>All vascular plants (including woody species that are smaller than 1 m.</generalTaxonomicCoverage>
+        <generalTaxonomicCoverage>All vascular plants. The herb layer included all vascular species, both woody plants smaller than 1 m and non-woody plants, as well as lianas. The shrub layer was defined as all woody species with a height between 1 and 7 m and the tree layer as all trees reaching heights more than 7 m. Corylus avellana was always classified into the shrub layer, regardless of its height.</generalTaxonomicCoverage>
         <taxonomicClassification>
           <taxonRankName>kingdom</taxonRankName>
           <taxonRankValue>Plantae</taxonRankValue>
