@@ -25,6 +25,8 @@ library(EML)
 ```{r}
 directory <- here::here("datasets", "fornalab-formica-wp1-vegetation", "data")
 raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Herb")
+raw_data_shrub <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Shrub")
+raw_data_tree <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Tree")
 raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Plot characteristics")
 raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Digitalization info")
 ```
@@ -118,26 +120,49 @@ references <- list(
 ```{r}
 data_plot <-
   raw_data_plot %>%
-  dplyr::left_join(raw_data_digitalization) %>% 
+  dplyr::left_join(raw_data_digitalization) %>%
   dplyr::mutate(
-    event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
     parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":")
   )
 
-data_herb <- 
-  raw_data_herb %>% 
+data_herb <-
+  raw_data_herb %>%
   dplyr::mutate(
-    event_id = paste("FORMICA_VEG", "plot", .data$Code, sep = ":"),
-    parent_event_id = paste("FORMICA_VEG", "transect", substr(.data$Code, 1, 6), sep = ":"),
-    occurrence_id = paste0("UGENT:FORMICA:", .data$Code, ":HERB:", sub(" ", "_", .data$Species_name_long))
-  ) 
-coordinates <-  
-  data_herb %>% 
-    dplyr::select(event_id, Latitude, Longitude) %>% 
-    dplyr::distinct()
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = paste("UGENT:FORMICA", .data$Code, "HERB", sub(" ", "_", .data$Species_name_long), sep = ":"),
+    organism_quantity_type = "% coverage of herb layer"
+  )
+
+data_shrub <-
+  raw_data_shrub %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = paste("UGENT:FORMICA", .data$Code, "SHRUB", sub(" ", "_", .data$Species_name_long), sep = ":"),
+    organism_quantity_type = "% coverage of shrub layer"
+  )
+
+data_tree <-
+  raw_data_tree %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = paste("UGENT:FORMICA", .data$Code, "TREE", sub(" ", "_", .data$Species_name_long), sep = ":"),
+    organism_quantity_type = "% coverage of tree layer"
+  )
+
+column_names <- c("occurrence_id", "Cover", "organism_quantity_type", "event_id", "Species_name_long")
+data_veg <- rbind(
+  data_herb[column_names], data_shrub[column_names], data_tree[column_names]
+) %>% 
+  arrange(event_id)
+
+coordinates <-
+  data_herb %>%
+  dplyr::select(event_id, Latitude, Longitude) %>%
+  dplyr::distinct()
 data_plot <-
-  data_plot %>% 
-  dplyr::left_join(coordinates)
+  data_plot %>%
+  dplyr::left_join(coordinates, by = dplyr::join_by(event_id))
 ```
 ```{r}
 
@@ -183,7 +208,7 @@ event <-
   )
 
 occurrence <-
-  data_herb %>% 
+  data_veg %>% 
   mutate(
     .keep = "none",
     language = data_language,
@@ -196,7 +221,7 @@ occurrence <-
     collectionCode = "FORMICA",
     occurrenceID = .data$occurrence_id,
     organismQuantity = .data$Cover,
-    organismQuantityType = "% coverage of herb layer",
+    organismQuantityType = .data$organism_quantity_type,
     occurrenceStatus = "present",
     eventID = .data$event_id, 
     scientificName = .data$Species_name_long,
