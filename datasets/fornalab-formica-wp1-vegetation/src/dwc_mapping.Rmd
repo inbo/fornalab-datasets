@@ -179,7 +179,7 @@ event <-
     parentEventID = .data$parent_event_id,
     eventDate = .data$Date_of_survey,
     samplesizeValue = 9,
-    sampleSizeUnit = "m2",
+    sampleSizeUnit = "square metre",
     habitat = "temperate forest",
     samplingProtocol = "vegetation survey",
     country = dplyr::recode(
