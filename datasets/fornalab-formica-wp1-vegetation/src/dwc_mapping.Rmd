@@ -197,7 +197,7 @@ event <-
     decimalLatitude = .data$Latitude,
     decimalLongitude = .data$Longitude,
     geodeticDatum = "EPSG:4326",
-    coordinateUncertaintyInMeters = 30,
+    coordinateUncertaintyInMeters = 30
   )
 
 occurrence <-
