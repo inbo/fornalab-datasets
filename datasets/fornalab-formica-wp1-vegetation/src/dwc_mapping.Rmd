@@ -143,10 +143,14 @@ data_tree <-
   )
 
 column_names <- c("occurrence_id", "Cover", "organism_quantity_type", "event_id", "Species_name_long")
-data_veg <- rbind(
-  data_herb[column_names], data_shrub[column_names], data_tree[column_names]
+
+data_veg <- 
+  dplyr::bind_rows(
+  dplyr::select(data_herb, dplyr::all_of(column_names)),
+  dplyr::select(data_shrub, dplyr::all_of(column_names)),
+  dplyr::select(data_tree, dplyr::all_of(column_names))
 ) %>% 
-  arrange(event_id)
+  dplyr::arrange(event_id)
 
 coordinates <-
   data_herb %>%
@@ -348,8 +352,6 @@ eml$dataset$coverage$taxonomicCoverage$generalTaxonomicCoverage <- taxonomic_des
 eml$additionalMetadata$metadata$gbif$bibliography$citation <- references
 ```
 
-
 ```{r write EML}
 EML::write_eml(eml, here::here(dir_export, "eml.xml"))
 ```
-
