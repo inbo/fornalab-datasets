@@ -24,11 +24,11 @@ library(EML)
 
 ```{r}
 directory <- here::here("datasets", "fornalab-formica-wp1-vegetation", "data")
-raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Herb")
-raw_data_shrub <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Shrub")
-raw_data_tree <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Tree")
-raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Plot characteristics")
-raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Digitalization info")
+raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Herb")
+raw_data_shrub <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Shrub")
+raw_data_tree <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Tree")
+raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Plot characteristics")
+raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Digitalization info")
 ```
 
 # Provide metadata
@@ -242,6 +242,29 @@ releve <-
     lichensIdentified = "False"
   )
 ```
+
+# Check species names with GBIF backbone
+
+```{r}
+from_gbif <-
+  occurrence %>%
+  select(scientificName, taxonRank) %>%
+  distinct %>%
+  mutate(
+    lookup = purrr::map2(
+      scientificName,
+      taxonRank,
+      ~ rgbif::name_backbone(.x, rank = .y, kingdom = "Plantae")
+    ),
+    .keep = "none"
+  ) %>%
+  dplyr::pull(lookup) %>%
+  purrr::list_rbind()
+
+## not matched exactly
+unique(occurrence$scientificName)[!unique(occurrence$scientificName) %in% from_gbif$canonicalName]
+```
+
 
 ## Write darwin core
 
