@@ -24,11 +24,11 @@ library(EML)
 
 ```{r}
 directory <- here::here("datasets", "fornalab-formica-wp1-vegetation", "data")
-raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Herb")
-raw_data_shrub <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Shrub")
-raw_data_tree <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Tree")
-raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Plot characteristics")
-raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version37.xlsx"), sheet = "Digitalization info")
+raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Herb")
+raw_data_shrub <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Shrub")
+raw_data_tree <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Tree")
+raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Plot characteristics")
+raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Digitalization info")
 ```
 
 # Provide metadata
@@ -143,10 +143,14 @@ data_tree <-
   )
 
 column_names <- c("occurrence_id", "Cover", "organism_quantity_type", "event_id", "Species_name_long")
-data_veg <- rbind(
-  data_herb[column_names], data_shrub[column_names], data_tree[column_names]
+
+data_veg <- 
+  dplyr::bind_rows(
+  dplyr::select(data_herb, dplyr::all_of(column_names)),
+  dplyr::select(data_shrub, dplyr::all_of(column_names)),
+  dplyr::select(data_tree, dplyr::all_of(column_names))
 ) %>% 
-  arrange(event_id)
+  dplyr::arrange(event_id)
 
 coordinates <-
   data_herb %>%
@@ -175,7 +179,7 @@ event <-
     parentEventID = .data$parent_event_id,
     eventDate = .data$Date_of_survey,
     samplesizeValue = 9,
-    sampleSizeUnit = "m2",
+    sampleSizeUnit = "square metre",
     habitat = "temperate forest",
     samplingProtocol = "vegetation survey",
     country = dplyr::recode(
@@ -193,7 +197,7 @@ event <-
     decimalLatitude = .data$Latitude,
     decimalLongitude = .data$Longitude,
     geodeticDatum = "EPSG:4326",
-    coordinateUncertaintyInMeters = 30,
+    coordinateUncertaintyInMeters = 30
   )
 
 occurrence <-
@@ -238,6 +242,29 @@ releve <-
     lichensIdentified = "False"
   )
 ```
+
+# Check species names with GBIF backbone
+
+```{r}
+from_gbif <-
+  occurrence %>%
+  select(scientificName, taxonRank) %>%
+  distinct %>%
+  mutate(
+    lookup = purrr::map2(
+      scientificName,
+      taxonRank,
+      ~ rgbif::name_backbone(.x, rank = .y, kingdom = "Plantae")
+    ),
+    .keep = "none"
+  ) %>%
+  dplyr::pull(lookup) %>%
+  purrr::list_rbind()
+
+## not matched exactly
+unique(occurrence$scientificName)[!unique(occurrence$scientificName) %in% from_gbif$canonicalName]
+```
+
 
 ## Write darwin core
 
@@ -348,8 +375,6 @@ eml$dataset$coverage$taxonomicCoverage$generalTaxonomicCoverage <- taxonomic_des
 eml$additionalMetadata$metadata$gbif$bibliography$citation <- references
 ```
 
-
 ```{r write EML}
 EML::write_eml(eml, here::here(dir_export, "eml.xml"))
 ```
-
