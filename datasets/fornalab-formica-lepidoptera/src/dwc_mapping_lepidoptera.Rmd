@@ -32,7 +32,7 @@ raw_data <- read_excel(here::here(directory, "raw", "Raw moth sampling data.xlsx
 ```{r basic metadata}
 short_name <- "FORMICA_LEPIDOPTERA"
 title <- "FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the FORMICA project"
-description <- c(
+abstract <- c(
   "FORMICA_LEPIDOPTERA is a sampling event dataset published by Ghent University. It contains information on 128 sampling events with 1595 validated occurrences of macro-moths in 2020. These data were gathered as part of the research conducted by Vangansebeke et al. (in preparation).
 Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues
 We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.
@@ -42,6 +42,7 @@ This sampling took place in the framework of the FORMICA project (www.formica.ug
 
 ```{r metadata}
 publisher <- "Ghent University"
+dataset_id = ""
 update_frequency <- "notPlanned"
 type <- "Samplingevent"
 metadata_language <- "en"
@@ -104,6 +105,33 @@ taxonomic_description <- "The sampling focus for this dataset is macro-moths, i.
 references <- list(list(NA))
 ```
 
+```{r project metadata}
+project_title <- "Forest Microclimate Assessment (FORMICA)"
+project_personnel <- purrr::keep(creators, ~ .x$title %in% c("Pieter De Frenne", "Pieter Vangansbeke", "Sanne Govaert"))
+project_abstract <- "Microclimatic buffering of plant responses to macroclimate warming in temperate forests.
+Recent global warming is acting on ecosystems across the globe and threatening biodiversity. Yet, due to slow responses, many biological communities are lagging behind warming of the macroclimate (the climate of a large geographic region). The buffering of microclimates near the ground measured in local areas, arising from terrain features such as vegetation and topography, can explain why many species are lagging behind macroclimate warming. However, almost all studies ignore the effects of microclimates and key uncertainties still exist about this mechanism.
+Microclimates are particularly evident in forests, where understorey habitats are buffered by overstorey trees. In temperate forests, the understorey contains the vast majority of plant diversity and plays an essential role in driving ecosystem processes.
+The overall goal of FORMICA (FORest MICroclimate Assessment) is to quantify and understand the role of microclimatic buffering in modulating forest plant responses to macroclimate warming. We apply microtemperature loggers, perform experimental heating, use fluorescent tubes and install a large-scale transplant experiment in temperate forests across Europe. The results will then be integrated in models to forecast plant diversity in temperate forests as macroclimate warms.
+FORMICA is a large integrative study on microclimatic buffering of macroclimate warming in forests. The project will reshape our current understanding of the impacts of climate change on forests and help land managers and policy makers to develop urgently needed adaptation strategies."
+funding <- "European Research Council (ERC) Starting Grant FORMICA 757833"
+study_area_description <- "Europe"
+design_description <- "Work package 1: Observatory: plant data at individual, population, species, community & ecosystem level
+
+Global macroclimate is changing significantly, with a rise in temperature as one of the most studied trends. Less monitored though nevertheless important is the microclimate. As this microclimate can differ considerably from the macroclimate due to local terrain features or vegetation cover, it might protect plants against the consequences of climate change. Forests, which create their own unique microclimatic systems driven by the vegetation structure, can thus buffer organisms against the rising temperature. Therefore, animals and understorey plants would not have to migrate or adapt as quickly as expected.
+
+The goal of WP1 is twofold:
+- To quantify microclimatic buffering and investigate the impact of forest characteristics (tree species composition, management, structure)
+- To study climate - plant performance relationships along different spatial scales
+
+Why?
+
+To gain more insight in the establishment of microclimates and to predict the effects of future climate change on understorey species taking into account microclimates. Further, this work package will also provide management guidelines on how to manage forest while focussing on conversation in the face of macroclimate warming.
+
+How?
+
+A macro- and microclimatic plot network was established across four spatial scales: (1) a latitudinal gradient from Norway to central Italy with plots in nine different regions, (2) an altitudinal gradient in three of the selected regions, (3) a management gradient and (4) and gradient from the forest edge towards the core. In addition to macro- and microclimate, the forest structure, soil and litter characteristics and the vegetation community and its functional traits were assessed."
+```
+
 # Create ID's and join data frames
 
 ```{r}
@@ -129,7 +157,7 @@ event <-
     language = data_language,
     license = data_license, 
     rightsHolder = publisher,
-    datasetID = "", # doi of published dataset
+    datasetID = dataset_id,
     institutionCode = "UGent", 
     datasetName = title,
     eventID = .data$event_id,
@@ -152,13 +180,14 @@ event <-
 
 occurrence <-
   my_data %>% 
+  dplyr::filter(!is.na(`Species (Scientific name)`)) %>% 
   dplyr::mutate(
     .keep = "none",
     language = data_language,
     type = "Event",
     license = data_license, 
     rightsHolder = publisher,
-    datasetID = "", # doi of published dataset
+    datasetID = dataset_id,
     datasetName = title,
     basisOfRecord = "HumanObservation",
     collectionCode = "FORMICA",
@@ -169,12 +198,49 @@ occurrence <-
     eventID = .data$event_id, 
     scientificName = .data$`Species (Scientific name)`,
     kingdom = "Animalia",
-    taxonRank = dplyr::if_else(
-      grepl("subsp.", .data$`Species (Scientific name)`, fixed = TRUE), 
-      "subspecies",
-      "species"
-    )
+    taxonRank = "species"
   )
+```
+
+# Data quality check
+
+## Check classes of columns
+
+```{r}
+# Event
+inherits(event$eventDate, "POSIXct")
+check_event_numeric <- c(
+  "decimalLatitude",
+  "decimalLongitude"
+)
+purrr::map(event[, check_event_numeric], is.numeric)
+
+# Occurrence
+is.numeric(occurrence$organismQuantity)
+```
+
+
+## Check species names with GBIF backbone
+
+```{r}
+from_gbif <-
+  occurrence %>%
+  select(scientificName, taxonRank) %>%
+  distinct %>%
+  mutate(
+    lookup = purrr::map2(
+      scientificName,
+      taxonRank,
+      ~ rgbif::name_backbone(.x, rank = .y, kingdom = "Animalia")
+    ),
+    .keep = "none"
+  ) %>%
+  dplyr::pull(lookup) %>%
+  purrr::list_rbind()
+
+## not matched exactly
+no_exact_match <- unique(occurrence$scientificName)[!unique(occurrence$scientificName) %in% from_gbif$canonicalName]
+from_gbif %>% filter(verbatim_name %in% no_exact_match)
 ```
 
 ## Write darwin core
@@ -210,20 +276,13 @@ create_eml_contributors <- function(contributor_list) {
 
 This script is based on input data above.
 
-```{r EML transformation}
-# Initiate EML
-eml <- list(
-  packageId = uuid::UUIDgenerate(),
-  system = "uuid",
-  dataset = list()
-)
-
+```{r EML dataset}
 # Set short name and title
 eml$dataset$shortName <- short_name
 eml$dataset$title <- title
 
 # Set abstract
-eml$dataset$abstract$para <- description
+eml$dataset$abstract$para <- abstract
 
 # Set update frequency (requires a description, even if empty)
 eml$dataset$maintenance <- list(
@@ -280,13 +339,22 @@ eml$dataset$coverage$taxonomicCoverage <-
       })
   )
 eml$dataset$coverage$taxonomicCoverage$generalTaxonomicCoverage <- taxonomic_description # does not work
+```
 
+```{r EML project}
+eml$dataset$project$title <- project_title
+eml$dataset$project$personnel <- create_eml_contributors(project_personnel)
+eml$dataset$project$abstract$para <- project_abstract
+eml$dataset$project$funding$para <- funding
+eml$dataset$project$studyAreaDescription$descriptor$descriptorValue <- study_area_description
+eml$dataset$project$designDescription$description$para <- design_description
+```
+
+```{r EML additional metadata}
 # Bibliographic citations
 eml$additionalMetadata$metadata$gbif$bibliography$citation <- references
 ```
 
-
 ```{r write EML}
 EML::write_eml(eml, here::here(dir_export, "eml.xml"))
 ```
-
