@@ -171,7 +171,7 @@ data_tree <-
     organism_quantity_type = "% coverage of tree layer"
   )
 
-column_names <- c("occurrence_id", "Cover", "organism_quantity_type", "event_id", "Species_name_long")
+column_names <- c("occurrence_id", "Cover", "organism_quantity_type", "event_id", "Species_name_long", "Taxon_rank")
 
 data_veg <- 
   dplyr::bind_rows(
@@ -240,11 +240,7 @@ occurrence <-
     eventID = .data$event_id, 
     scientificName = .data$Species_name_long,
     kingdom = "Plantae",
-    taxonRank = dplyr::if_else(
-      grepl("subsp.", .data$Species_name_long, fixed = TRUE), 
-      "subspecies",
-      "species"
-    )
+    taxonRank = .data$Taxon_rank
   )
 
 releve <- 
