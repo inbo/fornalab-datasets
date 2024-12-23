@@ -8,7 +8,7 @@ This repository contains the functionality to standardize several datasets of th
 
 Title (and GitHub directory) | IPT | GBIF
 --- | --- | ---
-FORMICA_VEG | [IPT](https://ipt.inbo.be/manage/resource.do?r=formica_veg) | [GBIF](https://www.gbif.org/dataset/93fb6063-1eb7-463b-abbb-95d828147d19)
+[FORMICA_VEG](https://github.com/inbo/fornalab-datasets/tree/master/datasets/fornalab-formica-wp1-vegetation) | [IPT](https://ipt.inbo.be/manage/resource.do?r=formica_veg) | [GBIF](https://www.gbif.org/dataset/93fb6063-1eb7-463b-abbb-95d828147d19)
 
 ## Repo structure
 
