@@ -39,7 +39,7 @@ Documenting the provenance and scope of datasets is required in order to publish
 short_name <- "FORMICA_VEG"
 title <- "FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
 abstract <- c(
-  paste0(title, "is a sampling event dataset published by Ghent University. It contains information on 125 sampling events (vegetation relevées of 3 x 3 m²) with 4159 validated occurrences of vascular plants in ancient deciduous broadleaved forests in temperate Europe. These data were collected to study understorey vegetation biodiversity and composition responses to distance to the forest edge in ancient forest stands with different management types in 45 edge-to-interior forest transects across Europe (Govaert et al., 2019, <a href=\"http://doi.org/10.1111/jvs.12844\">http://doi.org/10.1111/jvs.12844</a>). The aim was to disentangle the effects of the management type and the distance to the edge on alpha diversity of understorey plants in multiple European regions, while accounting for environmental characteristics. Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues."),
+  paste0("\"", title, "\" is a sampling event dataset published by Ghent University. It contains information on 125 sampling events (vegetation relevées of 3 x 3 m²) with 4159 validated occurrences of vascular plants in ancient deciduous broadleaved forests in temperate Europe. These data were collected to study understorey vegetation biodiversity and composition responses to distance to the forest edge in ancient forest stands with different management types in 45 edge-to-interior forest transects across Europe (Govaert et al., 2019, <a href=\"http://doi.org/10.1111/jvs.12844\">http://doi.org/10.1111/jvs.12844</a>). The aim was to disentangle the effects of the management type and the distance to the edge on alpha diversity of understorey plants in multiple European regions, while accounting for environmental characteristics. Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues."),
 "We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata or via opendata@inbo.be.",
 "This sampling took place in the framework of the FORMICA project (<a href=\"https://formica.ugent.be/\">FORMICA</a>) and was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO)."
 )
@@ -151,7 +151,7 @@ data_herb <-
   raw_data_herb %>%
   dplyr::mutate(
     event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
-    occurrence_id = paste("UGENT:FORMICA", .data$Code, "HERB", sub(" ", "_", .data$Species_name_long), sep = ":"),
+    occurrence_id = .data$Occurrence_id,
     organism_quantity_type = "% coverage of herb layer"
   )
 
@@ -159,7 +159,7 @@ data_shrub <-
   raw_data_shrub %>%
   dplyr::mutate(
     event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
-    occurrence_id = paste("UGENT:FORMICA", .data$Code, "SHRUB", sub(" ", "_", .data$Species_name_long), sep = ":"),
+    occurrence_id = .data$Occurrence_id,
     organism_quantity_type = "% coverage of shrub layer"
   )
 
@@ -167,7 +167,7 @@ data_tree <-
   raw_data_tree %>%
   dplyr::mutate(
     event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
-    occurrence_id = paste("UGENT:FORMICA", .data$Code, "TREE", sub(" ", "_", .data$Species_name_long), sep = ":"),
+    occurrence_id = .data$Occurrence_id,
     organism_quantity_type = "% coverage of tree layer"
   )
 
