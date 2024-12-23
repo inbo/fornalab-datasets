@@ -109,6 +109,32 @@ taxonomic_description <- "All vascular plants. The herb layer included all vascu
 references <- list(list("Govaert S, Meeussen C, Vanneste T, et al. (2019). Edge influence on understorey plant communities depends on forest management. Journal of Vegetation Science. 2020;31:281–292. doi.org/10.1111/jvs.12844"))
 ```
 
+```{r project metadata}
+project_title <- "Forest Microclimate Assessment (FORMICA)"
+project_personnel <- purrr::keep(creators, ~ .x$title %in% c("Pieter De Frenne", "Pieter Vangansbeke", "Sanne Govaert", "Camille Meeussens", "Thomas Vanneste"))
+project_abstract <- "Microclimatic buffering of plant responses to macroclimate warming in temperate forests.
+Recent global warming is acting on ecosystems across the globe and threatening biodiversity. Yet, due to slow responses, many biological communities are lagging behind warming of the macroclimate (the climate of a large geographic region). The buffering of microclimates near the ground measured in local areas, arising from terrain features such as vegetation and topography, can explain why many species are lagging behind macroclimate warming. However, almost all studies ignore the effects of microclimates and key uncertainties still exist about this mechanism.
+Microclimates are particularly evident in forests, where understorey habitats are buffered by overstorey trees. In temperate forests, the understorey contains the vast majority of plant diversity and plays an essential role in driving ecosystem processes.
+The overall goal of FORMICA (FORest MICroclimate Assessment) is to quantify and understand the role of microclimatic buffering in modulating forest plant responses to macroclimate warming. We apply microtemperature loggers, perform experimental heating, use fluorescent tubes and install a large-scale transplant experiment in temperate forests across Europe. The results will then be integrated in models to forecast plant diversity in temperate forests as macroclimate warms.
+FORMICA is a large integrative study on microclimatic buffering of macroclimate warming in forests. The project will reshape our current understanding of the impacts of climate change on forests and help land managers and policy makers to develop urgently needed adaptation strategies."
+funding <- "European Research Council (ERC) Starting Grant FORMICA 757833"
+study_area_description <- "Europe"
+design_description <- "Work package 1: Observatory: plant data at individual, population, species, community & ecosystem level
+
+Global macroclimate is changing significantly, with a rise in temperature as one of the most studied trends. Less monitored though nevertheless important is the microclimate. As this microclimate can differ considerably from the macroclimate due to local terrain features or vegetation cover, it might protect plants against the consequences of climate change. Forests, which create their own unique microclimatic systems driven by the vegetation structure, can thus buffer organisms against the rising temperature. Therefore, animals and understorey plants would not have to migrate or adapt as quickly as expected.
+
+The goal of WP1 is twofold:
+- To quantify microclimatic buffering and investigate the impact of forest characteristics (tree species composition, management, structure)
+- To study climate - plant performance relationships along different spatial scales
+
+Why?
+
+To gain more insight in the establishment of microclimates and to predict the effects of future climate change on understorey species taking into account microclimates. Further, this work package will also provide management guidelines on how to manage forest while focussing on conversation in the face of macroclimate warming.
+
+How?
+
+A macro- and microclimatic plot network was established across four spatial scales: (1) a latitudinal gradient from Norway to central Italy with plots in nine different regions, (2) an altitudinal gradient in three of the selected regions, (3) a management gradient and (4) and gradient from the forest edge towards the core. In addition to macro- and microclimate, the forest structure, soil and litter characteristics and the vegetation community and its functional traits were assessed."
+```
 
 # Create ID's and join data frames
 
@@ -298,7 +324,7 @@ from_gbif %>% filter(verbatim_name %in% no_exact_match)
 ```
 
 
-## Write darwin core
+## Write Darwin Core
 
 ```{r write dwc}
 dir_export <- here::here(directory, "processed")
@@ -311,6 +337,8 @@ readr::write_csv(releve, here::here(dir_export, "releve.csv"), na = "")
 ```
 
 # Create metadata file (eml.xml)
+
+The GBIF Metadata Profile is primarily based on the Ecological Metadata Language (EML).
 
 ## Function to create contributors in EML format
 
@@ -332,16 +360,16 @@ create_eml_contributors <- function(contributor_list) {
 
 This script is based on input data above.
 
-The GBIF Metadata Profile is primarily based on the Ecological Metadata Language (EML).
-
-```{r EML transformation}
+```{r EML initiation}
 # Initiate EML
 eml <- list(
   packageId = uuid::UUIDgenerate(),
   system = "uuid",
   dataset = list()
 )
+```
 
+```{r EML dataset}
 # Set short name and title
 eml$dataset$shortName <- short_name
 eml$dataset$title <- title
@@ -404,7 +432,18 @@ eml$dataset$coverage$taxonomicCoverage <-
       })
   )
 eml$dataset$coverage$taxonomicCoverage$generalTaxonomicCoverage <- taxonomic_description # does not work
+```
 
+```{r EML project}
+eml$dataset$project$title <- project_title
+eml$dataset$project$personnel <- create_eml_contributors(project_personnel)
+eml$dataset$project$abstract$para <- project_abstract
+eml$dataset$project$funding$para <- funding
+eml$dataset$project$studyAreaDescription$descriptor$descriptorValue <- study_area_description
+eml$dataset$project$designDescription$description$para <- design_description
+```
+
+```{r EML additional metadata}
 # Bibliographic citations
 eml$additionalMetadata$metadata$gbif$bibliography$citation <- references
 ```
