@@ -24,7 +24,7 @@ library(EML)
 
 ```{r}
 directory <- here::here("datasets", "fornalab-formica-lepidoptera", "data")
-raw_data <- read_excel(here::here(directory, "raw", "Raw moth sampling data.xlsx"), sheet = "Data")
+raw_data <- read_excel(here::here(directory, "raw", "Raw moth sampling data_onlyvalues.xlsx"), sheet = "Sheet1")
 ```
 
 # Provide metadata
@@ -141,8 +141,7 @@ my_data <-
     transect = toupper(Transect),
     code = toupper(fullplotID),
     event_id = paste("FORMICA_LEPIDOPTERA", "PLOT", .data$code, Period, sep = ":"),
-    parent_event_id = paste("FORMICA", "TRANSECT", substr(.data$code, 1, 6), sep = ":"),
-    occurrence_id = paste("UGENT:FORMICA", .data$code, Period, "LEPIODOPTERA", sub(" ", "_", .data$`Species (Scientific name)`), sep = ":")
+    parent_event_id = paste("FORMICA", "TRANSECT", substr(.data$code, 1, 6), sep = ":")
   )
 ```
 
@@ -191,7 +190,7 @@ occurrence <-
     datasetName = title,
     basisOfRecord = "HumanObservation",
     collectionCode = "FORMICA",
-    occurrenceID = .data$occurrence_id,
+    occurrenceID = .data$Occurrence_id,
     organismQuantity = .data$Amount,
     organismQuantityType = "individuals",
     occurrenceStatus = "present",
