@@ -180,14 +180,6 @@ data_veg <-
   dplyr::select(data_tree, dplyr::all_of(column_names))
 ) %>% 
   dplyr::arrange(event_id)
-
-coordinates <-
-  data_herb %>%
-  dplyr::select(event_id, Latitude, Longitude) %>%
-  dplyr::distinct()
-data_plot <-
-  data_plot %>%
-  dplyr::left_join(coordinates, by = dplyr::join_by(event_id))
 ```
 
 # Darwin core transformation
@@ -263,10 +255,10 @@ releve <-
     project = "FORMICA (Forest Microclimate Assessment)",
     coverTotalInPercentage = .data$Total_cover,
     coverTreesInPercentage = .data$Tree_cover,
-    coverShrubsInPercentage	= .data$Shrub_cover,
+    coverShrubsInPercentage	= as.numeric(.data$Shrub_cover),
     coverHerbsInPercentage	= .data$Vascular_plants,
-    coverMossesInPercentage	= .data$Moss,
-    coverLitterInPercentage = .data$Litter,
+    coverMossesInPercentage	= as.numeric(.data$Moss),
+    coverLitterInPercentage = as.numeric(.data$Litter),
     mossesIdentified = "False",
     lichensIdentified = "False"
   )
