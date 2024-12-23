@@ -26,7 +26,7 @@ The structure for each dataset in [datasets](datasets) is based on [Cookiecutter
 
 ## Contributors
 
-[List of contributors](https://github.com/inbo/mica-occurrences/graphs/contributors)
+[List of contributors](https://github.com/inbo/fornalab-datasets/graphs/contributors)
 
 ## License
 
