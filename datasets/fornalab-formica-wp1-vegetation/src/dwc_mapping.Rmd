@@ -47,6 +47,7 @@ abstract <- c(
 
 ```{r metadata}
 publisher <- "Ghent University"
+dataset_id <- "https://doi.org/10.15468/be9pwc"
 update_frequency <- "notPlanned"
 type <- "Samplingevent"
 metadata_language <- "en"
@@ -193,7 +194,7 @@ event <-
     language = data_language,
     license = data_license, 
     rightsHolder = publisher,
-    datasetID = "", # doi of published dataset
+    datasetID = dataset_id,
     institutionCode = "UGent", 
     datasetName = title,
     eventID = .data$event_id,
@@ -229,7 +230,7 @@ occurrence <-
     type = "Event",
     license = data_license, 
     rightsHolder = publisher,
-    datasetID = "", # doi of published dataset
+    datasetID = dataset_id,
     datasetName = title,
     basisOfRecord = "HumanObservation",
     collectionCode = "FORMICA",
