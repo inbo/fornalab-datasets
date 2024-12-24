@@ -42,7 +42,7 @@ Issues with the dataset can be reported at https://github.com/inbo/fornalab-data
 
 ```{r metadata}
 publisher <- "Ghent University"
-dataset_id = ""
+dataset_id = "https://doi.org/10.15468/3sckuk"
 update_frequency <- "notPlanned"
 type <- "Samplingevent"
 metadata_language <- "en"
