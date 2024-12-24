@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="9b239b00-223a-4b6c-b7d0-4f30bc52ad23" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="f97b6057-33ac-4e6b-a114-403ea33582e6" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <shortName>FORMICA_LEPIDOPTERA</shortName>
     <title>FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
@@ -88,15 +88,20 @@ Issues with the dataset can be reported at https://github.com/inbo/fornalab-data
     <coverage>
       <geographicCoverage>
         <geographicDescription>Temperate forests in Belgium and Northern-France</geographicDescription>
-        <boundingCoordinates/>
+        <boundingCoordinates>
+          <westBoundingCoordinate>2.8174</westBoundingCoordinate>
+          <eastBoundingCoordinate>5.9398</eastBoundingCoordinate>
+          <northBoundingCoordinate>50.9741</northBoundingCoordinate>
+          <southBoundingCoordinate>49.3211</southBoundingCoordinate>
+        </boundingCoordinates>
       </geographicCoverage>
       <temporalCoverage>
         <rangeOfDates>
           <beginDate>
-            <calendarDate>2020-06-17T00:00:00Z</calendarDate>
+            <calendarDate>2020-06-17</calendarDate>
           </beginDate>
           <endDate>
-            <calendarDate>2020-10-23T00:00:00Z</calendarDate>
+            <calendarDate>2020-10-23</calendarDate>
           </endDate>
         </rangeOfDates>
       </temporalCoverage>

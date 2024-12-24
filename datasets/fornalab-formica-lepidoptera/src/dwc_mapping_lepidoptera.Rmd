@@ -299,12 +299,16 @@ eml$dataset$keywordSet <-
 # Set license
 eml$dataset$intellectualRights$para <- metadata_license
 
-# Set temporal coverage and geographicDescription
+# Set temporal and geographic coverage and geographicDescription
 eml$dataset$coverage <-
   EML::set_coverage(
     beginDate = begin_date,
     endDate = end_date,
-    geographicDescription = geographic_description
+    geographicDescription = geographic_description,
+    westBoundingCoordinate = min(event$decimalLongitude),
+    southBoundingCoordinate = min(event$decimalLatitude),
+    eastBoundingCoordinate = max(event$decimalLongitude),
+    northBoundingCoordinate = max(event$decimalLatitude)
   )
 
 # Set taxonomic coverage
