@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="77a8e0e8-03bf-4d74-9301-d0a541d1667f" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="9b239b00-223a-4b6c-b7d0-4f30bc52ad23" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <shortName>FORMICA_LEPIDOPTERA</shortName>
     <title>FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
@@ -123,70 +123,6 @@ Issues with the dataset can be reported at https://github.com/inbo/fornalab-data
       <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
       <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
     </contact>
-    <project>
-      <title>Forest Microclimate Assessment (FORMICA)</title>
-      <personnel>
-        <individualName>
-          <givenName>Pieter</givenName>
-          <surName>Vangansbeke</surName>
-        </individualName>
-        <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
-        <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
-        <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
-      </personnel>
-      <personnel>
-        <individualName>
-          <givenName>Pieter</givenName>
-          <surName>De Frenne</surName>
-        </individualName>
-        <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
-        <electronicMailAddress>pieter.defrenne@ugent.be</electronicMailAddress>
-        <userId directory="https://orcid.org/">0000-0002-8613-0943</userId>
-      </personnel>
-      <personnel>
-        <individualName>
-          <givenName>Sanne</givenName>
-          <surName>Govaert</surName>
-        </individualName>
-        <organizationName>Research Institute for Nature and Forest (INBO)</organizationName>
-        <electronicMailAddress>sanne.govaert@inbo.be</electronicMailAddress>
-        <userId directory="https://orcid.org/">0000-0002-8939-1305</userId>
-      </personnel>
-      <abstract>
-        <para>Microclimatic buffering of plant responses to macroclimate warming in temperate forests.
-Recent global warming is acting on ecosystems across the globe and threatening biodiversity. Yet, due to slow responses, many biological communities are lagging behind warming of the macroclimate (the climate of a large geographic region). The buffering of microclimates near the ground measured in local areas, arising from terrain features such as vegetation and topography, can explain why many species are lagging behind macroclimate warming. However, almost all studies ignore the effects of microclimates and key uncertainties still exist about this mechanism.
-Microclimates are particularly evident in forests, where understorey habitats are buffered by overstorey trees. In temperate forests, the understorey contains the vast majority of plant diversity and plays an essential role in driving ecosystem processes.
-The overall goal of FORMICA (FORest MICroclimate Assessment) is to quantify and understand the role of microclimatic buffering in modulating forest plant responses to macroclimate warming. We apply microtemperature loggers, perform experimental heating, use fluorescent tubes and install a large-scale transplant experiment in temperate forests across Europe. The results will then be integrated in models to forecast plant diversity in temperate forests as macroclimate warms.
-FORMICA is a large integrative study on microclimatic buffering of macroclimate warming in forests. The project will reshape our current understanding of the impacts of climate change on forests and help land managers and policy makers to develop urgently needed adaptation strategies.</para>
-      </abstract>
-      <funding>
-        <para>European Research Council (ERC) Starting Grant FORMICA 757833</para>
-      </funding>
-      <studyAreaDescription>
-        <descriptor>
-          <descriptorValue>Europe</descriptorValue>
-        </descriptor>
-      </studyAreaDescription>
-      <designDescription>
-        <description>
-          <para>Work package 1: Observatory: plant data at individual, population, species, community &amp; ecosystem level
-
-Global macroclimate is changing significantly, with a rise in temperature as one of the most studied trends. Less monitored though nevertheless important is the microclimate. As this microclimate can differ considerably from the macroclimate due to local terrain features or vegetation cover, it might protect plants against the consequences of climate change. Forests, which create their own unique microclimatic systems driven by the vegetation structure, can thus buffer organisms against the rising temperature. Therefore, animals and understorey plants would not have to migrate or adapt as quickly as expected.
-
-The goal of WP1 is twofold:
-- To quantify microclimatic buffering and investigate the impact of forest characteristics (tree species composition, management, structure)
-- To study climate - plant performance relationships along different spatial scales
-
-Why?
-
-To gain more insight in the establishment of microclimates and to predict the effects of future climate change on understorey species taking into account microclimates. Further, this work package will also provide management guidelines on how to manage forest while focussing on conversation in the face of macroclimate warming.
-
-How?
-
-A macro- and microclimatic plot network was established across four spatial scales: (1) a latitudinal gradient from Norway to central Italy with plots in nine different regions, (2) an altitudinal gradient in three of the selected regions, (3) a management gradient and (4) and gradient from the forest edge towards the core. In addition to macro- and microclimate, the forest structure, soil and litter characteristics and the vegetation community and its functional traits were assessed.</para>
-        </description>
-      </designDescription>
-    </project>
   </dataset>
   <additionalMetadata>
     <metadata>
