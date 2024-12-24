@@ -48,6 +48,7 @@ docs/
 *.txt
 *.gz
 occurrence.RData
+/datasets/fornalab-formica-wp1-vegetation/data/raw
 
 # Mac OS X
 .DS_Store
