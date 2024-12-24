@@ -2,7 +2,7 @@
 <eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="77a8e0e8-03bf-4d74-9301-d0a541d1667f" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <shortName>FORMICA_LEPIDOPTERA</shortName>
-    <title>FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the FORMICA project</title>
+    <title>FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
     <creator>
       <individualName>
         <givenName>Pieter</givenName>
@@ -66,9 +66,9 @@
     </metadataProvider>
     <abstract>
       <para>FORMICA_LEPIDOPTERA is a sampling event dataset published by Ghent University. It contains information on 128 sampling events with 1595 validated occurrences of macro-moths in 2020. These data were gathered as part of the research conducted by Vangansebeke et al. (in preparation).
-Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues
-We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.
-This sampling took place in the framework of the FORMICA project (www.formica.ugent.be) and was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO).</para>
+Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues.</para>
+      <para>We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.</para>
+      <para>This sampling took place in the framework of the Forest Microclimate Assessment (&lt;a href="https://formica.ugent.be/"&gt;FORMICA&lt;/a&gt;) project and was funded by the European Research Council (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO).</para>
     </abstract>
     <keywordSet>
       <keyword>Samplingevent</keyword>
@@ -93,10 +93,10 @@ This sampling took place in the framework of the FORMICA project (www.formica.ug
       <temporalCoverage>
         <rangeOfDates>
           <beginDate>
-            <calendarDate>2020-06-17</calendarDate>
+            <calendarDate>2020-06-17T00:00:00Z</calendarDate>
           </beginDate>
           <endDate>
-            <calendarDate>2020-10-23</calendarDate>
+            <calendarDate>2020-10-23T00:00:00Z</calendarDate>
           </endDate>
         </rangeOfDates>
       </temporalCoverage>

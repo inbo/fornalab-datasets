@@ -31,12 +31,12 @@ raw_data <- read_excel(here::here(directory, "raw", "Raw moth sampling data_only
 
 ```{r basic metadata}
 short_name <- "FORMICA_LEPIDOPTERA"
-title <- "FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the FORMICA project"
+title <- "FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
 abstract <- c(
   "FORMICA_LEPIDOPTERA is a sampling event dataset published by Ghent University. It contains information on 128 sampling events with 1595 validated occurrences of macro-moths in 2020. These data were gathered as part of the research conducted by Vangansebeke et al. (in preparation).
-Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues
-We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.
-This sampling took place in the framework of the FORMICA project (www.formica.ugent.be) and was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO)."
+Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues.",
+"We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.",
+"This sampling took place in the framework of the Forest Microclimate Assessment (<a href=\"https://formica.ugent.be/\">FORMICA</a>) project and was funded by the European Research Council (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO)."
 )
 ```
 
