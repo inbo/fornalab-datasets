@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="49680d12-053a-4d7f-8c19-e8ba4799176a" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="abd62a7a-d693-4adc-bdd1-711cd33862f0" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <shortName>FORMICA_LEPIDOPTERA</shortName>
     <title>FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
@@ -65,7 +65,7 @@
       <userId directory="https://orcid.org/">0000-0002-8939-1305</userId>
     </metadataProvider>
     <abstract>
-      <para>FORMICA_LEPIDOPTERA is a sampling event dataset published by Ghent University. It contains information on 128 sampling events with 1595 validated occurrences of macro-moths in 2020. These data were gathered as part of the research conducted by Vangansbeke et al. (in preparation).
+      <para>FORMICA_LEPIDOPTERA is a sampling event dataset published by Ghent University. It contains information on 128 sampling events with 1595 validated occurrences of macro-moths in 2020. This dataset originates from research conducted by Vangansbeke et al. (2025), which investigated the influence of canopy structure and edge-to-interior gradients on macro-moth communities in Belgium and northern France. Light traps were employed for data collection. The study revealed lower moth abundance and species richness at forest edges, and reduced moth populations in open forest stands compared to closed stands. These findings highlight the critical role of functional forest interior habitats and structurally complex, relatively undisturbed forests for moth conservation.
 Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues.</para>
       <para>We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.</para>
       <para>This sampling took place in the framework of the Forest Microclimate Assessment (&lt;a href="https://formica.ugent.be/"&gt;FORMICA&lt;/a&gt;) project and was funded by the European Research Council (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO).</para>
