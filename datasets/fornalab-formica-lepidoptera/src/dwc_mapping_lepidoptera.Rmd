@@ -52,7 +52,7 @@ metadata_license <- "cc0-1.0"
 creators <- list(
   list(
     title = "Pieter Vangansbeke",
-    email = "pieter.vangansbeke@ugent.be",
+    email = "pieter.vangansbeke@inbo.be",
     organization = "Forest & Nature Lab, Ghent University",
     first_name = "Pieter",
     last_name = "Vangansbeke",

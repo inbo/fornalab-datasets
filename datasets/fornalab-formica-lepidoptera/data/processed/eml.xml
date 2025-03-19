@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="abd62a7a-d693-4adc-bdd1-711cd33862f0" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="5fa0ef82-9dfd-43d1-85fe-ed8c7e27639a" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <shortName>FORMICA_LEPIDOPTERA</shortName>
     <title>FORMICA_LEPIDOPTERA - Lepidoptera along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
@@ -9,7 +9,7 @@
         <surName>Vangansbeke</surName>
       </individualName>
       <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
-      <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
+      <electronicMailAddress>pieter.vangansbeke@inbo.be</electronicMailAddress>
       <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
     </creator>
     <creator>
@@ -52,7 +52,7 @@
         <surName>Vangansbeke</surName>
       </individualName>
       <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
-      <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
+      <electronicMailAddress>pieter.vangansbeke@inbo.be</electronicMailAddress>
       <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
     </metadataProvider>
     <metadataProvider>
@@ -125,7 +125,7 @@ Issues with the dataset can be reported at https://github.com/inbo/fornalab-data
         <surName>Vangansbeke</surName>
       </individualName>
       <organizationName>Forest &amp; Nature Lab, Ghent University</organizationName>
-      <electronicMailAddress>pieter.vangansbeke@ugent.be</electronicMailAddress>
+      <electronicMailAddress>pieter.vangansbeke@inbo.be</electronicMailAddress>
       <userId directory="https://orcid.org/">0000-0002-6356-2858</userId>
     </contact>
   </dataset>
