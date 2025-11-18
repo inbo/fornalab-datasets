@@ -141,7 +141,6 @@ occurrence <-
     datasetID = dataset_id,
     datasetName = title,
     basisOfRecord = "HumanObservation",
-    collectionCode = "FORMICA",
     occurrenceID = .data$occurrence_id,
     organismQuantity = .data$Cover,
     organismQuantityType = .data$organism_quantity_type,
