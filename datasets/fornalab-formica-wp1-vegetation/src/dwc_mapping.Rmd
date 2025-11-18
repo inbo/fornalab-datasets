@@ -49,7 +49,9 @@ data_plot <-
   raw_data_plot %>%
   dplyr::left_join(raw_data_digitalization) %>%
   dplyr::mutate(
+    # Use 'Code" (country - elevation - forest type - distance to edge combination) to create unique event identifiers for plots
     event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    # Use Transect (country - elevation - forest type combination) to create parent event identifiers
     parent_event_id = paste("FORMICA", "TRANSECT", substr(.data$Code, 1, 6), sep = ":")
   )
 
