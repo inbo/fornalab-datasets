@@ -1,5 +1,5 @@
 ---
-title: "Darwin Core Mapping"
+title: "Darwin Core mapping"
 subtitle: "Vegetation survey data from FORMICA WP1"
 author: "Sanne Govaert"
 date: "`r Sys.Date()`"
