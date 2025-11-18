@@ -496,3 +496,15 @@ readr::write_csv(releve, here::here(dir_export, "releve.csv"), na = "")
 ```{r write EML}
 EML::write_eml(eml, here::here(dir_export, "eml.xml"))
 ```
+
+## Copy meta.xml
+
+'meta.xml' is a static file describing the Darwin Core Archive structure with the definitions. It is manually adapted for each dataset, and needs to be copied to the export folder.
+
+```{r copy meta.xml}
+  file.copy(
+    here::here("datasets", "fornalab-formica-wp1-vegetation", "extdata", "meta.xml"),
+    here::here(dir_export, "meta.xml")
+  )
+```
+
