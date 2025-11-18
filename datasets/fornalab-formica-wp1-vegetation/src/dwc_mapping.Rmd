@@ -281,7 +281,7 @@ How?
 
 A macro- and microclimatic plot network was established across four spatial scales: (1) a latitudinal gradient from Norway to central Italy with plots in nine different regions, (2) an altitudinal gradient in three of the selected regions, (3) a management gradient and (4) and gradient from the forest edge towards the core. In addition to macro- and microclimate, the forest structure, soil and litter characteristics and the vegetation community and its functional traits were assessed."
 
-logo <- "https://raw.githubusercontent.com/inbo/fornalab-datasets/main/man/figures/logo_formica.png"
+logo <- "https://raw.githubusercontent.com/inbo/fornalab-datasets/main/man/figures/logo_fornalab.png"
 ```
 
 
