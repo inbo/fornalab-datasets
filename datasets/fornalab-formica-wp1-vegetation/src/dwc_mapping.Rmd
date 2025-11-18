@@ -7,24 +7,28 @@ output: html_document
 ---
 
 ```{r setup, include = FALSE}
+# Set options for code chunk output appearance
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 ```
 
 Load libraries:
 
 ```{r message = FALSE}
+# Load required R libraries for data import, manipulation, and metadata processing
 library(readxl)
 library(dplyr)
 library(here)
 library(digest)        
 library(EML)
-library(stringr)
 ```
 
 # Read source data
 
 ```{r}
+# Define the directory containing the data files
 directory <- here::here("datasets", "fornalab-formica-wp1-vegetation", "data")
+
+# Import different sheets for each vegetation stratum, plot characteristics, and survey info
 raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Herb")
 raw_data_shrub <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Shrub")
 raw_data_tree <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Tree")
@@ -32,7 +36,143 @@ raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_vers
 raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Digitalization info")
 ```
 
-# Provide metadata
+# Data processing
+
+## Data
+
+### Data preparation
+
+Create ID's and join data frames.
+
+```{r}
+data_plot <-
+  raw_data_plot %>%
+  dplyr::left_join(raw_data_digitalization) %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    parent_event_id = paste("FORMICA", "TRANSECT", substr(.data$Code, 1, 6), sep = ":")
+  )
+
+data_herb <-
+  raw_data_herb %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = .data$Occurrence_id,
+    # 'organism_quantity_type' indicates which layer coverage is measured
+    organism_quantity_type = "% coverage of herb layer"
+  )
+
+data_shrub <-
+  raw_data_shrub %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = .data$Occurrence_id,
+    organism_quantity_type = "% coverage of shrub layer"
+  )
+
+data_tree <-
+  raw_data_tree %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = .data$Occurrence_id,
+    organism_quantity_type = "% coverage of tree layer"
+  )
+
+column_names <- c("occurrence_id", "Cover", "organism_quantity_type", "event_id", "Species_name_long", "Taxon_rank")
+
+data_veg <- 
+  dplyr::bind_rows(
+  dplyr::select(data_herb, dplyr::all_of(column_names)),
+  dplyr::select(data_shrub, dplyr::all_of(column_names)),
+  dplyr::select(data_tree, dplyr::all_of(column_names))
+) %>% 
+  dplyr::arrange(event_id)
+```
+
+### Darwin core transformation
+
+```{r dwc transformation}
+# Create the 'event' table with required Darwin Core fields
+event <- 
+  data_plot %>% 
+  dplyr::mutate(
+    .keep = "none",
+    type = "Event",
+    language = data_language,
+    license = data_license, 
+    rightsHolder = publisher,
+    datasetID = dataset_id,
+    institutionCode = "UGent", 
+    datasetName = title,
+    eventID = .data$event_id,
+    parentEventID = .data$parent_event_id,
+    eventDate = .data$Date_of_survey,
+    samplesizeValue = 9,
+    sampleSizeUnit = "square metre",
+    habitat = "temperate forest",
+    samplingProtocol = "vegetation survey",
+    country = dplyr::recode(
+      .data$Region,
+      "PO" = "Poland",
+      "GE" = "Germany",
+      "BE" = "Belgium",
+      "NF" = "France",
+      "SW" = "Switzerland",
+      "CS" = "Sweden",
+      "SS" = "Sweden",
+      "NO" = "Norway",
+      "IT" = "Italy"
+      ),
+    decimalLatitude = .data$Latitude,
+    decimalLongitude = .data$Longitude,
+    geodeticDatum = "EPSG:4326",
+    coordinateUncertaintyInMeters = 30
+  )
+
+# Create the 'occurrence' table, mapping each observed species to Darwin Core
+occurrence <-
+  data_veg %>% 
+  mutate(
+    .keep = "none",
+    language = data_language,
+    type = "Event",
+    license = data_license, 
+    rightsHolder = publisher,
+    datasetID = dataset_id,
+    datasetName = title,
+    basisOfRecord = "HumanObservation",
+    collectionCode = "FORMICA",
+    occurrenceID = .data$occurrence_id,
+    organismQuantity = .data$Cover,
+    organismQuantityType = .data$organism_quantity_type,
+    occurrenceStatus = "present",
+    eventID = .data$event_id, 
+    scientificName = .data$Species_name_long,
+    kingdom = "Plantae",
+    taxonRank = .data$Taxon_rank
+  )
+
+# Prepare summary relevé data (cover percentages per plot)
+releve <- 
+  data_plot %>%
+  dplyr::mutate(
+    .keep = "none",
+    eventID = .data$event_id,
+    project = "FORMICA (Forest Microclimate Assessment)",
+    coverTotalInPercentage = .data$Total_cover,
+    coverTreesInPercentage = .data$Tree_cover,
+    coverShrubsInPercentage	= as.numeric(.data$Shrub_cover),
+    coverHerbsInPercentage	= .data$Vascular_plants,
+    coverMossesInPercentage	= as.numeric(.data$Moss),
+    coverLitterInPercentage = as.numeric(.data$Litter),
+    mossesIdentified = "False",
+    lichensIdentified = "False"
+  )
+```
+
+## Metadata
+
+### Prepare metadata
 
 Documenting the provenance and scope of datasets is required in order to publish data through the GBIF network. Check the [GBIF Metadata Profile guide](https://ipt.gbif.org/manual/en/ipt/latest/gbif-metadata-profile) for more information. 
 
@@ -97,8 +237,11 @@ creators <- list(
     orcid = "0000-0002-8613-0943"
   )
 )
+
+# Pick the metadata provider and main contact for this dataset from the creators
 metadata_provider <- purrr::keep(creators, ~ .x$title %in% c("Sanne Govaert", "Pieter Vangansbeke"))
 contact <- purrr::keep(creators, ~ .x$title == "Sanne Govaert")
+
 keywords <- c("vascular plants", "understorey herbs", "vegetation survey", "forest edges", "temperate forests", "forest structure")
 begin_date <-  min(raw_data_digitalization$Date_of_survey)
 end_date <- max(raw_data_digitalization$Date_of_survey)
@@ -142,193 +285,6 @@ A macro- and microclimatic plot network was established across four spatial scal
 logo <- "https://raw.githubusercontent.com/inbo/fornalab-datasets/main/man/figures/logo_formica.png"
 ```
 
-# Create ID's and join data frames
-
-```{r}
-data_plot <-
-  raw_data_plot %>%
-  dplyr::left_join(raw_data_digitalization) %>%
-  dplyr::mutate(
-    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
-    parent_event_id = paste("FORMICA", "TRANSECT", substr(.data$Code, 1, 6), sep = ":")
-  )
-
-data_herb <-
-  raw_data_herb %>%
-  dplyr::mutate(
-    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
-    occurrence_id = .data$Occurrence_id,
-    organism_quantity_type = "% coverage of herb layer"
-  )
-
-data_shrub <-
-  raw_data_shrub %>%
-  dplyr::mutate(
-    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
-    occurrence_id = .data$Occurrence_id,
-    organism_quantity_type = "% coverage of shrub layer"
-  )
-
-data_tree <-
-  raw_data_tree %>%
-  dplyr::mutate(
-    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
-    occurrence_id = .data$Occurrence_id,
-    organism_quantity_type = "% coverage of tree layer"
-  )
-
-column_names <- c("occurrence_id", "Cover", "organism_quantity_type", "event_id", "Species_name_long", "Taxon_rank")
-
-data_veg <- 
-  dplyr::bind_rows(
-  dplyr::select(data_herb, dplyr::all_of(column_names)),
-  dplyr::select(data_shrub, dplyr::all_of(column_names)),
-  dplyr::select(data_tree, dplyr::all_of(column_names))
-) %>% 
-  dplyr::arrange(event_id)
-```
-
-# Darwin core transformation
-
-```{r dwc transformation}
-event <- 
-  data_plot %>% 
-  dplyr::mutate(
-    .keep = "none",
-    type = "Event",
-    language = data_language,
-    license = data_license, 
-    rightsHolder = publisher,
-    datasetID = dataset_id,
-    institutionCode = "UGent", 
-    datasetName = title,
-    eventID = .data$event_id,
-    parentEventID = .data$parent_event_id,
-    eventDate = .data$Date_of_survey,
-    samplesizeValue = 9,
-    sampleSizeUnit = "square metre",
-    habitat = "temperate forest",
-    samplingProtocol = "vegetation survey",
-    country = dplyr::recode(
-      .data$Region,
-      "PO" = "Poland",
-      "GE" = "Germany",
-      "BE" = "Belgium",
-      "NF" = "France",
-      "SW" = "Switzerland",
-      "CS" = "Sweden",
-      "SS" = "Sweden",
-      "NO" = "Norway",
-      "IT" = "Italy"
-      ),
-    decimalLatitude = .data$Latitude,
-    decimalLongitude = .data$Longitude,
-    geodeticDatum = "EPSG:4326",
-    coordinateUncertaintyInMeters = 30
-  )
-
-occurrence <-
-  data_veg %>% 
-  mutate(
-    .keep = "none",
-    language = data_language,
-    type = "Event",
-    license = data_license, 
-    rightsHolder = publisher,
-    datasetID = dataset_id,
-    datasetName = title,
-    basisOfRecord = "HumanObservation",
-    collectionCode = "FORMICA",
-    occurrenceID = .data$occurrence_id,
-    organismQuantity = .data$Cover,
-    organismQuantityType = .data$organism_quantity_type,
-    occurrenceStatus = "present",
-    eventID = .data$event_id, 
-    scientificName = .data$Species_name_long,
-    kingdom = "Plantae",
-    taxonRank = .data$Taxon_rank
-  )
-
-releve <- 
-  data_plot %>%
-  dplyr::mutate(
-    .keep = "none",
-    eventID = .data$event_id,
-    project = "FORMICA (Forest Microclimate Assessment)",
-    coverTotalInPercentage = .data$Total_cover,
-    coverTreesInPercentage = .data$Tree_cover,
-    coverShrubsInPercentage	= as.numeric(.data$Shrub_cover),
-    coverHerbsInPercentage	= .data$Vascular_plants,
-    coverMossesInPercentage	= as.numeric(.data$Moss),
-    coverLitterInPercentage = as.numeric(.data$Litter),
-    mossesIdentified = "False",
-    lichensIdentified = "False"
-  )
-```
-
-# Data quality check
-
-## Check classes of columns
-
-```{r}
-# Event
-inherits(event$eventDate, "POSIXct")
-check_event_numeric <- c(
-  "decimalLatitude",
-  "decimalLongitude"
-)
-purrr::map(event[, check_event_numeric], is.numeric)
-
-# Occurrence
-is.numeric(occurrence$organismQuantity)
-
-# Relevé
-check_releve_numeric <- c(
-  "coverTotalInPercentage",
-  "coverTreesInPercentage",
-  "coverShrubsInPercentage",
-  "coverMossesInPercentage",
-  "coverLitterInPercentage"
-)
-purrr::map(releve[, check_releve_numeric], is.numeric)
-```
-
-
-## Check species names with GBIF backbone
-
-```{r}
-from_gbif <-
-  occurrence %>%
-  select(scientificName, taxonRank) %>%
-  distinct %>%
-  mutate(
-    lookup = purrr::map2(
-      scientificName,
-      taxonRank,
-      ~ rgbif::name_backbone(.x, rank = .y, kingdom = "Plantae")
-    ),
-    .keep = "none"
-  ) %>%
-  dplyr::pull(lookup) %>%
-  purrr::list_rbind()
-
-## not matched exactly
-no_exact_match <- unique(occurrence$scientificName)[!unique(occurrence$scientificName) %in% from_gbif$canonicalName]
-from_gbif %>% filter(verbatim_name %in% no_exact_match)
-```
-
-
-## Write Darwin Core
-
-```{r write dwc}
-dir_export <- here::here(directory, "processed")
- if (!dir.exists(dir_export)) {
-    dir.create(dir_export, recursive = TRUE)
-  }
-readr::write_csv(event, here::here(dir_export, "event.csv"), na = "")
-readr::write_csv(occurrence, here::here(dir_export, "occurrence.csv"), na = "")
-readr::write_csv(releve, here::here(dir_export, "releve.csv"), na = "")
-```
 
 # Create metadata file (eml.xml)
 
@@ -372,6 +328,8 @@ taxonomic_coverage <-
 
 ### Function to create contributors in EML format
 
+Formats each contributor entry in EML structure, including ORCID if present.
+
 ```{r create_eml_contributors function}
 create_eml_contributors <- function(contributor_list) {
   purrr::map(contributor_list, ~ list(
@@ -394,6 +352,7 @@ create_eml_contributors <- function(contributor_list) {
 This script is based on input data above.
 
 ```{r EML}
+# Construct the metadata file using all previous metadata and formatted contributors
 eml <- list(
   packageId = uuid::UUIDgenerate(),
   system = "uuid",
@@ -463,6 +422,74 @@ eml <- list(
   )
 )
 ```
+
+# Data quality check
+
+## Check classes of columns
+
+Check if columns across the event and occurrence datasets have the expected data types, e.g., verify event dates and numeric columns.
+
+```{r}
+# Event
+inherits(event$eventDate, "POSIXct")
+check_event_numeric <- c(
+  "decimalLatitude",
+  "decimalLongitude"
+)
+purrr::map(event[, check_event_numeric], is.numeric)
+
+# Occurrence
+is.numeric(occurrence$organismQuantity)
+
+# Relevé
+check_releve_numeric <- c(
+  "coverTotalInPercentage",
+  "coverTreesInPercentage",
+  "coverShrubsInPercentage",
+  "coverMossesInPercentage",
+  "coverLitterInPercentage"
+)
+purrr::map(releve[, check_releve_numeric], is.numeric)
+```
+
+## Check if species names match with the GBIF backbone taxonomic names
+
+```{r}
+from_gbif <-
+  occurrence %>%
+  select(scientificName, taxonRank) %>%
+  distinct %>%
+  mutate(
+    lookup = purrr::map2(
+      scientificName,
+      taxonRank,
+      ~ rgbif::name_backbone(.x, rank = .y, kingdom = "Plantae")
+    ),
+    .keep = "none"
+  ) %>%
+  dplyr::pull(lookup) %>%
+  purrr::list_rbind()
+
+# Identify unmatched names for error checking
+no_exact_match <- unique(occurrence$scientificName)[!unique(occurrence$scientificName) %in% from_gbif$canonicalName]
+from_gbif %>% filter(verbatim_name %in% no_exact_match)
+```
+
+# Write data
+
+## Write Darwin Core
+
+```{r write dwc}
+dir_export <- here::here(directory, "processed")
+ if (!dir.exists(dir_export)) {
+    dir.create(dir_export, recursive = TRUE)
+  }
+readr::write_csv(event, here::here(dir_export, "event.csv"), na = "")
+readr::write_csv(occurrence, here::here(dir_export, "occurrence.csv"), na = "")
+readr::write_csv(releve, here::here(dir_export, "releve.csv"), na = "")
+```
+
+## Write EML
 
 ```{r write EML}
 EML::write_eml(eml, here::here(dir_export, "eml.xml"))
