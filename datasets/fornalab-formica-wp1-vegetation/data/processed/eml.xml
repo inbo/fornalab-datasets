@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="617c621d-3a6e-49bb-a5a8-74c4d3877990" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="cfdb938e-3e77-443f-8cd5-f489390b3d32" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
   <dataset>
     <shortName>FORMICA_VEG</shortName>
     <title>FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project</title>
@@ -89,7 +89,12 @@
     <coverage>
       <geographicCoverage>
         <geographicDescription>Europe</geographicDescription>
-        <boundingCoordinates/>
+        <boundingCoordinates>
+          <westBoundingCoordinate>2.8174</westBoundingCoordinate>
+          <eastBoundingCoordinate>18.8501</eastBoundingCoordinate>
+          <northBoundingCoordinate>63.5047</northBoundingCoordinate>
+          <southBoundingCoordinate>42.7819</southBoundingCoordinate>
+        </boundingCoordinates>
       </geographicCoverage>
       <temporalCoverage>
         <rangeOfDates>
@@ -173,7 +178,7 @@ FORMICA is a large integrative study on microclimatic buffering of macroclimate 
         <para>European Research Council (ERC) Starting Grant FORMICA 757833</para>
       </funding>
       <studyAreaDescription>
-        <descriptor>
+        <descriptor citableClassificationSystem="false" name="generic">
           <descriptorValue>Europe</descriptorValue>
         </descriptor>
       </studyAreaDescription>
@@ -204,6 +209,8 @@ A macro- and microclimatic plot network was established across four spatial scal
         <bibliography>
           <citation>Govaert S, Meeussen C, Vanneste T, et al. (2019). Edge influence on understorey plant communities depends on forest management. Journal of Vegetation Science. 2020;31:281–292. doi.org/10.1111/jvs.12844</citation>
         </bibliography>
+        <hierarchyLevel>dataset</hierarchyLevel>
+        <resourceLogoUrl>https://github.com/inbo/fornalab-datasets/tree/main/man/figures/logo_formica.png</resourceLogoUrl>
       </gbif>
     </metadata>
   </additionalMetadata>
