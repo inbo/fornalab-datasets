@@ -293,6 +293,8 @@ The GBIF Metadata Profile is based on the Ecological Metadata Language (EML).
 
 ### Prepare metadata terms
 
+This piece of code does not require any input, it uses the provided metadata.
+
 ```{r}
 # Keywords
 keywords_list <- list(
@@ -308,7 +310,6 @@ keywords_list <- list(
     keyword = keywords
   )
 )
-
 
 # Taxonomic coverage
 taxonomic_coverage <-
@@ -327,7 +328,7 @@ taxonomic_coverage <-
 
 ### Function to create contributors in EML format
 
-Formats each contributor entry in EML structure, including ORCID if present.
+This function formats each contributor entry in EML structure, including ORCID if present.
 
 ```{r create_eml_contributors function}
 create_eml_contributors <- function(contributor_list) {
@@ -348,7 +349,7 @@ create_eml_contributors <- function(contributor_list) {
 
 ### Create EML
 
-This script is based on input data above.
+This piece of code does not require any input, it uses the provided metadata.
 
 ```{r EML}
 # Construct the metadata file using all previous metadata and formatted contributors
@@ -426,7 +427,7 @@ eml <- list(
 
 ## Check classes of columns
 
-Check if columns across the event and occurrence datasets have the expected data types, e.g., verify event dates and numeric columns.
+Check if columns across the tables have the expected data types, e.g., verify event dates and numeric columns.
 
 ```{r}
 # Event
