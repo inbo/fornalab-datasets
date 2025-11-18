@@ -42,13 +42,11 @@ vignettes/*.pdf
 docs/
 
 # Data
-*.xlsx
 *.geojson
 *.zip
 *.txt
 *.gz
 occurrence.RData
-/datasets/fornalab-formica-wp1-vegetation/data/raw
 
 # Mac OS X
 .DS_Store
