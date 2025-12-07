@@ -1,0 +1,523 @@
+---
+title: "Darwin Core mapping"
+subtitle: "Template for vegetation survey data from FORMICA WP1"
+author: "Sanne Govaert"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+# Set options for code chunk output appearance
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
+```
+
+Load libraries:
+
+```{r message = FALSE}
+# Load required R libraries for data import, manipulation, and metadata processing
+library(readxl)
+library(dplyr)
+library(here)
+library(digest)        
+library(EML)
+```
+
+# Read source data
+
+The source data is available in multiple tabs of an Excel file. We need to import each tab separately and in a later step join them together so the data is ready to be mapped to Darwin Core.
+Ideally, data is imported from csv and not from Excel files, because Excel is prone to encoding issues.
+
+```{r}
+# Define the directory containing the data files
+directory <- here::here("datasets", "template", "data")
+
+# Import different sheets for each vegetation stratum, plot characteristics, and survey info
+raw_data_herb <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Herb")
+raw_data_shrub <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Shrub")
+raw_data_tree <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Tree")
+raw_data_plot <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Plot characteristics")
+raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation survey_version38.xlsx"), sheet = "Digitalization info")
+```
+
+# Provide dataset-level metadata
+
+We need to provide some basic metadata about the dataset. DatasetID is the DOI of the dataset. A DOI is created once the dataset is registered with GBIF. So in our workflow, we keep this empty for the first publication, and fill it in when republishing the dataset after registration.
+
+```{r}
+publisher <- "Ghent University"
+dataset_id <- "https://doi.org/10.15468/be9pwc" 
+update_frequency <- "notPlanned"
+type <- "Samplingevent"
+metadata_language <- "en" # English
+data_language <- "en"
+data_license <- "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
+metadata_license <- "cc0-1.0"
+title <- "FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
+```
+
+# Data processing
+
+## Data
+
+### Data preparation
+
+We first need to join the raw data frames. We also need to create some id's because they are not available in the raw data.
+The code is already provided for you here, you just need to run the chunk and try to understand what is happening.
+
+Each identifier needs to be unique and stable. There are multiple options to create ID's:
+- Create an identifier with a sequential number (e.g. 1, 2, 3, ...)
+- Use a UUID (universally unique identifier) generator to create random unique identifiers
+- Create an identifier with meaningful information, for example including the plot code.
+
+1. 'occurrenceID' is the unique identifier for each observation of a species in a vegetation plot. We combined meaningful information with a hash that was generated based on the scientific name. We chose a hash instead of the scientific names, because scientific names can change over time (updates or corrections), while the hash will remain stable because it was added to the raw data.
+2. `eventID` is the unique identifier for each vegetation plot surveyed. `eventID`'s are created by combining "FORMICA_VEG", "PLOT" and the 'Code' column from the raw data.
+3. `parentEventID` are created by combining "FORMICA", "TRANSECT" and the first 6 characters of the 'Code' column from the raw data (which represent country - elevation - forest type combination). You could also choose a different parenEvent level, because there are multiple hierarchical levels possible (e.g., region, transect).
+
+```{r}
+data_plot <-
+  raw_data_plot %>%
+  dplyr::left_join(raw_data_digitalization) %>%
+  dplyr::mutate(
+    # Use 'Code" (country - elevation - forest type - distance to edge combination) to create unique event identifiers for plots
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    # Use Transect (country - elevation - forest type combination) to create parent event identifiers
+    parent_event_id = paste("FORMICA", "TRANSECT", substr(.data$Code, 1, 6), sep = ":")
+  )
+
+data_herb <-
+  raw_data_herb %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = .data$Occurrence_id,
+    # 'organism_quantity_type' indicates which layer coverage is measured
+    organism_quantity_type = "% coverage of herb layer"
+  )
+
+data_shrub <-
+  raw_data_shrub %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = .data$Occurrence_id,
+    organism_quantity_type = "% coverage of shrub layer"
+  )
+
+data_tree <-
+  raw_data_tree %>%
+  dplyr::mutate(
+    event_id = paste("FORMICA_VEG", "PLOT", .data$Code, sep = ":"),
+    occurrence_id = .data$Occurrence_id,
+    organism_quantity_type = "% coverage of tree layer"
+  )
+
+column_names <- c("occurrence_id", "Cover", "organism_quantity_type", "event_id", "Species_name_long", "Taxon_rank")
+
+data_veg <- 
+  dplyr::bind_rows(
+  dplyr::select(data_herb, dplyr::all_of(column_names)),
+  dplyr::select(data_shrub, dplyr::all_of(column_names)),
+  dplyr::select(data_tree, dplyr::all_of(column_names))
+) %>% 
+  dplyr::arrange(event_id)
+```
+
+### Darwin core transformation
+
+Now it is your turn! Fill in the Darwin Core fields in the event, occurrence and relevé tables.
+
+```{r dwc transformation}
+# Create the 'event' table with required Darwin Core fields
+event <- 
+  data_plot %>% 
+  dplyr::mutate(
+    .keep = "none",
+    type = "Event",
+    language = NA_character_,
+    license = NA_character_, 
+    rightsHolder = NA_character_,
+    datasetID = NA_character_,
+    institutionCode = NA_character_, 
+    datasetName = NA_character_,
+    eventID = NA_character_,
+    parentEventID = NA_character_,
+    eventDate = NA,
+    samplesizeValue = NA_real_,
+    sampleSizeUnit = NA_character_,
+    habitat = NA_character_,
+    samplingProtocol = NA_character_,
+    country = NA_character_,
+    decimalLatitude = NA_real_,
+    decimalLongitude = NA_real_,
+    geodeticDatum = NA_character_,
+    coordinateUncertaintyInMeters = NA_real_
+  )
+
+# Create the 'occurrence' table, mapping each observed species to Darwin Core
+occurrence <-
+  data_veg %>% 
+  mutate(
+    .keep = "none",
+    language = NA_character_,
+    type = NA_character_,
+    license = NA_character_, 
+    rightsHolder = NA_character_,
+    datasetID = NA_character_,
+    datasetName = NA_character_,
+    basisOfRecord = NA_character_,
+    occurrenceID = NA_character_,
+    organismQuantity = NA_real_,
+    organismQuantityType = NA_character_,
+    occurrenceStatus = NA_character_,
+    eventID = NA_character_, 
+    scientificName = NA_character_,
+    kingdom = NA_character_,
+    taxonRank = NA_character_
+  )
+
+# Prepare summary relevé data (cover percentages per plot)
+releve <- 
+  data_plot %>%
+  dplyr::mutate(
+    .keep = "none",
+    eventID = NA_character_,
+    project = NA_character_,
+    coverTotalInPercentage = NA_real_,
+    coverTreesInPercentage = NA_real_,
+    coverShrubsInPercentage	= NA_real_,
+    coverHerbsInPercentage	= NA_real_,
+    coverMossesInPercentage	= NA_real_,
+    coverLitterInPercentage = NA_real_,
+    mossesIdentified = NA,
+    lichensIdentified = NA
+  )
+```
+
+## Metadata
+
+### Prepare metadata
+
+Documenting the provenance and scope of datasets is required in order to publish data through the GBIF network. Check the [GBIF Metadata Profile guide](https://ipt.gbif.org/manual/en/ipt/latest/gbif-metadata-profile) for more information. 
+
+Markup in the abstract is in Docbook format, allowing e.g. to create hyperlinks in the metadata when published on GBIF.
+
+```{r basic metadata}
+short_name <- "FORMICA_VEG"
+abstract <- c(
+  paste0("\"", title, "\" is a sampling event dataset published by Ghent University. It contains information on 125 sampling events (vegetation relevées of 3 x 3 m²) with 4159 validated occurrences of vascular plants in ancient deciduous broadleaved forests in temperate Europe. These data were collected to study understorey vegetation biodiversity and composition responses to distance to the forest edge in ancient forest stands with different management types in 45 edge-to-interior forest transects across Europe (Govaert et al., 2019, <ulink url=\"http://doi.org/10.1111/jvs.12844\"><citetitle>http://doi.org/10.1111/jvs.12844</citetitle></ulink>). The aim was to disentangle the effects of the management type and the distance to the edge on alpha diversity of understorey plants in multiple European regions, while accounting for environmental characteristics. Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues."),
+"We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata or via opendata@inbo.be.",
+"This sampling took place in the framework of the <ulink url=\"https://formica.ugent.be\"><citetitle>FORMICA</citetitle></ulink> project and was funded by the European Research Council (ERC) (ERC Starting Grant FORMICA 757833). This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO)."
+)
+```
+
+```{r metadata}
+creators <- list(
+  list(
+    title = "Sanne Govaert", 
+    email = "sanne.govaert@inbo.be",
+    organization = "Research Institute for Nature and Forest (INBO)",
+    first_name = "Sanne", 
+    last_name = "Govaert", 
+    orcid = "0000-0002-8939-1305"
+  ),
+  list(
+    title = "Pieter Vangansbeke", 
+    email = "pieter.vangansbeke@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Pieter", 
+    last_name = "Vangansbeke", 
+    orcid = "0000-0002-6356-2858"
+  ),
+    list(
+    title = "Camille Meeussen", 
+    email = NA_character_,
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Camille", 
+    last_name = "Meeussen", 
+    orcid = "0000-0002-5869-4936"
+  ),
+    list(
+    title = "Thomas Vanneste", 
+    email = "thomas.vanneste@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Thomas", 
+    last_name = "Vanneste", 
+    orcid = "0000-0001-5296-917X"
+  ),
+    list(
+    title = "Pieter De Frenne", 
+    email = "pieter.defrenne@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University",
+    first_name = "Pieter", 
+    last_name = "De Frenne", 
+    orcid = "0000-0002-8613-0943"
+  )
+)
+
+# Pick the metadata provider and main contact for this dataset from the creators
+metadata_provider <- purrr::keep(creators, ~ .x$title %in% c("Sanne Govaert", "Pieter Vangansbeke"))
+contact <- purrr::keep(creators, ~ .x$title == "Sanne Govaert")
+
+keywords <- c("vascular plants", "understorey herbs", "vegetation survey", "forest edges", "temperate forests", "forest structure")
+begin_date <-  min(raw_data_digitalization$Date_of_survey)
+end_date <- max(raw_data_digitalization$Date_of_survey)
+geographic_description <- "Europe"
+taxonomic_coverage <- data.frame(
+  scientificName = "Plantae",
+  taxonRank = "kingdom"
+)
+taxonomic_description <- "All vascular plants. The herb layer included all vascular species, both woody plants smaller than 1 m and non-woody plants, as well as lianas. The shrub layer was defined as all woody species with a height between 1 and 7 m and the tree layer as all trees reaching heights more than 7 m. Corylus avellana was always classified into the shrub layer, regardless of its height."
+references <- list(
+  list("Govaert S, Meeussen C, Vanneste T, et al. (2019). Edge influence on understorey plant communities depends on forest management. Journal of Vegetation Science. 2020;31:281–292. doi.org/10.1111/jvs.12844")
+  )
+```
+
+```{r project metadata}
+project_title <- "Forest Microclimate Assessment (FORMICA)"
+project_personnel <- purrr::keep(creators, ~ .x$title %in% c("Pieter De Frenne", "Pieter Vangansbeke", "Sanne Govaert", "Camille Meeussens", "Thomas Vanneste"))
+project_abstract <- "Microclimatic buffering of plant responses to macroclimate warming in temperate forests.
+Recent global warming is acting on ecosystems across the globe and threatening biodiversity. Yet, due to slow responses, many biological communities are lagging behind warming of the macroclimate (the climate of a large geographic region). The buffering of microclimates near the ground measured in local areas, arising from terrain features such as vegetation and topography, can explain why many species are lagging behind macroclimate warming. However, almost all studies ignore the effects of microclimates and key uncertainties still exist about this mechanism.
+Microclimates are particularly evident in forests, where understorey habitats are buffered by overstorey trees. In temperate forests, the understorey contains the vast majority of plant diversity and plays an essential role in driving ecosystem processes.
+The overall goal of FORMICA (FORest MICroclimate Assessment) is to quantify and understand the role of microclimatic buffering in modulating forest plant responses to macroclimate warming. We apply microtemperature loggers, perform experimental heating, use fluorescent tubes and install a large-scale transplant experiment in temperate forests across Europe. The results will then be integrated in models to forecast plant diversity in temperate forests as macroclimate warms.
+FORMICA is a large integrative study on microclimatic buffering of macroclimate warming in forests. The project will reshape our current understanding of the impacts of climate change on forests and help land managers and policy makers to develop urgently needed adaptation strategies."
+funding <- "European Research Council (ERC) Starting Grant FORMICA 757833"
+study_area_description <- "Europe"
+design_description <- "Work package 1: Observatory: plant data at individual, population, species, community & ecosystem level
+
+Global macroclimate is changing significantly, with a rise in temperature as one of the most studied trends. Less monitored though nevertheless important is the microclimate. As this microclimate can differ considerably from the macroclimate due to local terrain features or vegetation cover, it might protect plants against the consequences of climate change. Forests, which create their own unique microclimatic systems driven by the vegetation structure, can thus buffer organisms against the rising temperature. Therefore, animals and understorey plants would not have to migrate or adapt as quickly as expected.
+
+The goal of WP1 is twofold:
+- To quantify microclimatic buffering and investigate the impact of forest characteristics (tree species composition, management, structure)
+- To study climate - plant performance relationships along different spatial scales
+
+Why?
+
+To gain more insight in the establishment of microclimates and to predict the effects of future climate change on understorey species taking into account microclimates. Further, this work package will also provide management guidelines on how to manage forest while focussing on conversation in the face of macroclimate warming.
+
+How?
+
+A macro- and microclimatic plot network was established across four spatial scales: (1) a latitudinal gradient from Norway to central Italy with plots in nine different regions, (2) an altitudinal gradient in three of the selected regions, (3) a management gradient and (4) and gradient from the forest edge towards the core. In addition to macro- and microclimate, the forest structure, soil and litter characteristics and the vegetation community and its functional traits were assessed."
+
+logo <- "https://raw.githubusercontent.com/inbo/fornalab-datasets/main/man/figures/logo-fornalab.jpg"
+```
+
+
+# Create metadata file (eml.xml)
+
+The GBIF Metadata Profile is based on the Ecological Metadata Language (EML). Below we provide the required metadata fields. All code is completed, you just need to run the chunks and look at the output. 
+
+## Create metadata file (eml.xml)
+
+### Prepare metadata terms
+
+This piece of code does not require any input, it uses the provided metadata.
+
+```{r}
+# Keywords
+keywords_list <- list(
+  list(
+    keywordThesaurus = paste(
+      "GBIF Dataset Type Vocabulary:",
+      "http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml"
+    ),
+    keyword = "Samplingevent"
+  ),
+  list(
+    keywordThesaurus = "n/a",
+    keyword = keywords
+  )
+)
+
+# Taxonomic coverage
+taxonomic_coverage <-
+  list(
+        taxonomicClassification =
+          purrr::map(1:nrow(taxonomic_coverage), function(i) {
+            current_row <- taxonomic_coverage[i, ]
+            list(
+              taxonRankName = current_row$taxonRank,
+              taxonRankValue = current_row$scientificName
+            )
+          }),
+        generalTaxonomicCoverage = taxonomic_description
+      )
+```
+
+### Function to create contributors in EML format
+
+This function formats each contributor entry in EML structure, including ORCID if present.
+
+```{r create_eml_contributors function}
+create_eml_contributors <- function(contributor_list) {
+  purrr::map(contributor_list, ~ list(
+    individualName = list(
+      givenName = .$first_name,
+      surName = .$last_name),
+    organizationName = .$organization, # Discouraged by EML, but used by IPT
+    electronicMailAddress = .$email,
+    userId = if (!is.na(.$orcid)) {
+      list(directory = "https://orcid.org/", .$orcid)
+    } else {
+      NULL
+    }
+  ))
+}
+```
+
+### Create EML
+
+This piece of code does not require any input, it uses the provided metadata.
+
+```{r EML}
+# Construct the metadata file using all previous metadata and formatted contributors
+eml <- list(
+  packageId = uuid::UUIDgenerate(),
+  system = "uuid",
+  dataset = list(
+    title = title,
+    shortName = short_name,
+    abstract = list(para = abstract),
+    maintenance = list(
+      description = list(para = ""), # Requires a description, even if empty
+      maintenanceUpdateFrequency = update_frequency
+    ),
+    creator = create_eml_contributors(creators),
+    contact = create_eml_contributors(contact),
+    metadataProvider = create_eml_contributors(metadata_provider),
+    keywordSet = keywords_list,
+    intellectualRights = list(para = metadata_license),
+    coverage = list(
+      geographicCoverage = list(
+        geographicDescription = geographic_description,
+        boundingCoordinates = list(
+          westBoundingCoordinate = min(event$decimalLongitude),
+          southBoundingCoordinate = min(event$decimalLatitude),
+          eastBoundingCoordinate = max(event$decimalLongitude),
+          northBoundingCoordinate = max(event$decimalLatitude)
+        )
+      ),
+      temporalCoverage = list(
+        rangeOfDates = list(
+          beginDate = list(calendarDate = min(event$eventDate)),
+          endDate = list(calendarDate = max(event$eventDate))
+        )
+      ),
+      taxonomicCoverage = taxonomic_coverage
+    ),
+    # Project
+    project = list(
+      title = project_title,
+      abstract = list(para = project_abstract),
+      funding = list(para = funding),
+      studyAreaDescription = list(
+        descriptor = list(
+          descriptorValue = study_area_description,
+          name = "generic",
+          citableClassificationSystem = "false"
+        )
+      ),
+      designDescription = list(
+        description = list(para = design_description)
+      ),
+      personnel = create_eml_contributors(project_personnel)
+    )
+   ),
+  additionalMetadata = list(
+    metadata = list(
+      gbif = list(
+        hierarchyLevel = "dataset",
+        bibliography = list(
+          citation = list(
+            list(
+              citation = references
+            )
+          )
+        ),
+        resourceLogoUrl = logo
+      )
+    )
+  )
+)
+```
+
+# Data quality check
+
+## Check classes of columns
+
+Check if columns across the tables have the expected data types, e.g., verify event dates and numeric columns.
+
+```{r}
+# Event
+inherits(event$eventDate, "POSIXct")
+check_event_numeric <- c(
+  "decimalLatitude",
+  "decimalLongitude"
+)
+purrr::map(event[, check_event_numeric], is.numeric)
+
+# Occurrence
+is.numeric(occurrence$organismQuantity)
+
+# Relevé
+check_releve_numeric <- c(
+  "coverTotalInPercentage",
+  "coverTreesInPercentage",
+  "coverShrubsInPercentage",
+  "coverMossesInPercentage",
+  "coverLitterInPercentage"
+)
+purrr::map(releve[, check_releve_numeric], is.numeric)
+```
+
+## Check if species names match with the GBIF backbone taxonomic names
+
+```{r}
+from_gbif <-
+  occurrence %>%
+  select(scientificName, taxonRank) %>%
+  distinct %>%
+  mutate(
+    lookup = purrr::map2(
+      scientificName,
+      taxonRank,
+      ~ rgbif::name_backbone(.x, rank = .y, kingdom = "Plantae")
+    ),
+    .keep = "none"
+  ) %>%
+  dplyr::pull(lookup) %>%
+  purrr::list_rbind()
+
+# Identify unmatched names for error checking
+no_exact_match <- unique(occurrence$scientificName)[!unique(occurrence$scientificName) %in% from_gbif$canonicalName]
+from_gbif %>% filter(verbatim_name %in% no_exact_match)
+```
+
+# Write data
+
+## Write Darwin Core
+
+```{r write dwc}
+dir_export <- here::here(directory, "processed")
+ if (!dir.exists(dir_export)) {
+    dir.create(dir_export, recursive = TRUE)
+  }
+readr::write_csv(event, here::here(dir_export, "event.csv"), na = "")
+readr::write_csv(occurrence, here::here(dir_export, "occurrence.csv"), na = "")
+readr::write_csv(releve, here::here(dir_export, "releve.csv"), na = "")
+```
+
+## Write EML
+
+```{r write EML}
+EML::write_eml(eml, here::here(dir_export, "eml.xml"))
+```
+
+## Copy meta.xml
+
+'meta.xml' is a static file describing the Darwin Core Archive structure with the definitions. It is manually adapted for each dataset, and here it just needs to be copied to the export folder.
+
+```{r copy meta.xml}
+  file.copy(
+    here::here("datasets", "template", "extdata", "meta.xml"),
+    here::here(dir_export, "meta.xml")
+  )
+```
+
