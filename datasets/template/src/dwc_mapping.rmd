@@ -1,6 +1,6 @@
 ---
 title: "Darwin Core mapping"
-subtitle: "Vegetation survey data from FORMICA WP1"
+subtitle: "Template for vegetation survey data from FORMICA WP1"
 author: "Sanne Govaert"
 date: "`r Sys.Date()`"
 output: html_document
@@ -24,6 +24,9 @@ library(EML)
 
 # Read source data
 
+The source data is available in multiple tabs of an Excel file. We need to import each tab separately and in a later step join them together so the data is ready to be mapped to Darwin Core.
+Ideally, data is imported from csv and not from Excel files, because Excel is prone to encoding issues.
+
 ```{r}
 # Define the directory containing the data files
 directory <- here::here("datasets", "template", "data")
@@ -38,12 +41,14 @@ raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation s
 
 # Provide dataset-level metadata
 
+We need to provide some basic metadata about the dataset. DatasetID is the DOI of the dataset. A DOI is created once the dataset is registered with GBIF. So in our workflow, we keep this empty for the first publication, and fill it in when republishing the dataset after registration.
+
 ```{r}
 publisher <- "Ghent University"
-dataset_id <- "https://doi.org/10.15468/be9pwc"
+dataset_id <- "https://doi.org/10.15468/be9pwc" 
 update_frequency <- "notPlanned"
 type <- "Samplingevent"
-metadata_language <- "en"
+metadata_language <- "en" # English
 data_language <- "en"
 data_license <- "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
 metadata_license <- "cc0-1.0"
@@ -56,7 +61,17 @@ title <- "FORMICA_VEG - Vegetation surveys along edge-to-core transects in open 
 
 ### Data preparation
 
-Create ID's and join data frames.
+We first need to join the raw data frames. We also need to create some id's because they are not available in the raw data.
+The code is already provided for you here, you just need to run the chunk and try to understand what is happening.
+
+Each identifier needs to be unique and stable. There are multiple options to create ID's:
+- Create an identifier with a sequential number (e.g. 1, 2, 3, ...)
+- Use a UUID (universally unique identifier) generator to create random unique identifiers
+- Create an identifier with meaningful information, for example including the plot code.
+
+1. 'occurrenceID' is the unique identifier for each observation of a species in a vegetation plot. We combined meaningful information with a hash that was generated based on the scientific name. We chose a hash instead of the scientific names, because scientific names can change over time (updates or corrections), while the hash will remain stable because it was added to the raw data.
+2. `eventID` is the unique identifier for each vegetation plot surveyed. `eventID`'s are created by combining "FORMICA_VEG", "PLOT" and the 'Code' column from the raw data.
+3. `parentEventID` are created by combining "FORMICA", "TRANSECT" and the first 6 characters of the 'Code' column from the raw data (which represent country - elevation - forest type combination). You could also choose a different parenEvent level, because there are multiple hierarchical levels possible (e.g., region, transect).
 
 ```{r}
 data_plot <-
@@ -106,6 +121,8 @@ data_veg <-
 ```
 
 ### Darwin core transformation
+
+Now it is your turn! Fill in the Darwin Core fields in the event, occurrence and relevé tables.
 
 ```{r dwc transformation}
 # Create the 'event' table with required Darwin Core fields
@@ -179,6 +196,8 @@ releve <-
 ### Prepare metadata
 
 Documenting the provenance and scope of datasets is required in order to publish data through the GBIF network. Check the [GBIF Metadata Profile guide](https://ipt.gbif.org/manual/en/ipt/latest/gbif-metadata-profile) for more information. 
+
+Markup in the abstract is in Docbook format, allowing e.g. to create hyperlinks in the metadata when published on GBIF.
 
 ```{r basic metadata}
 short_name <- "FORMICA_VEG"
@@ -283,7 +302,7 @@ logo <- "https://raw.githubusercontent.com/inbo/fornalab-datasets/main/man/figur
 
 # Create metadata file (eml.xml)
 
-The GBIF Metadata Profile is based on the Ecological Metadata Language (EML).
+The GBIF Metadata Profile is based on the Ecological Metadata Language (EML). Below we provide the required metadata fields. All code is completed, you just need to run the chunks and look at the output. 
 
 ## Create metadata file (eml.xml)
 
@@ -493,7 +512,7 @@ EML::write_eml(eml, here::here(dir_export, "eml.xml"))
 
 ## Copy meta.xml
 
-'meta.xml' is a static file describing the Darwin Core Archive structure with the definitions. It is manually adapted for each dataset, and needs to be copied to the export folder.
+'meta.xml' is a static file describing the Darwin Core Archive structure with the definitions. It is manually adapted for each dataset, and here it just needs to be copied to the export folder.
 
 ```{r copy meta.xml}
   file.copy(
