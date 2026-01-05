@@ -41,9 +41,10 @@
     <field index="9" term="http://rs.tdwg.org/dwc/terms/organismQuantityType"/>
     <field index="10" term="http://rs.tdwg.org/dwc/terms/occurrenceStatus"/>
     <field index="11" term="http://rs.tdwg.org/dwc/terms/eventID"/>
-    <field index="12" term="http://rs.tdwg.org/dwc/terms/scientificName"/>
-    <field index="13" term="http://rs.tdwg.org/dwc/terms/kingdom"/>
-    <field index="14" term="http://rs.tdwg.org/dwc/terms/taxonRank"/>
+    <field index="12" term="http://rs.tdwg.org/dwc/terms/identificationVerificationStatus"/>
+    <field index="13" term="http://rs.tdwg.org/dwc/terms/scientificName"/>
+    <field index="14" term="http://rs.tdwg.org/dwc/terms/kingdom"/>
+    <field index="15" term="http://rs.tdwg.org/dwc/terms/taxonRank"/>
   </extension>
     <extension encoding="UTF-8" fieldsTerminatedBy="," linesTerminatedBy="\n" fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.gbif.org/terms/1.0/Releve">
     <files>

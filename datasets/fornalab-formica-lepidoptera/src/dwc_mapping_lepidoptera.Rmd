@@ -168,6 +168,7 @@ occurrence <-
     organismQuantityType = "individuals",
     occurrenceStatus = "present",
     eventID = .data$event_id, 
+    identificationVerificationStatus = "verified by expert",
     scientificName = .data$`Species (Scientific name)`,
     kingdom = "Animalia",
     taxonRank = "species"
