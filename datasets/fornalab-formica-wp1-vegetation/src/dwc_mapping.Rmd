@@ -148,7 +148,7 @@ occurrence <-
     organismQuantityType = .data$organism_quantity_type,
     occurrenceStatus = "present",
     eventID = .data$event_id, 
-    identificationVerificationStatus = "verified by expert",
+    identificationVerificationStatus = "validated",
     scientificName = .data$Species_name_long,
     kingdom = "Plantae",
     taxonRank = .data$Taxon_rank
