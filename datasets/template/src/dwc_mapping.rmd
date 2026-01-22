@@ -148,7 +148,8 @@ event <-
     decimalLatitude = NA_real_,
     decimalLongitude = NA_real_,
     geodeticDatum = NA_character_,
-    coordinateUncertaintyInMeters = NA_real_
+    coordinateUncertaintyInMeters = NA_real_,
+    verbatimCoordinateSystem = NA_character_
   )
 
 # Create the 'occurrence' table, mapping each observed species to Darwin Core

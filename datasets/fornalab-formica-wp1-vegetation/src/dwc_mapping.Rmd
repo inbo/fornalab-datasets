@@ -128,7 +128,8 @@ event <-
     decimalLatitude = .data$Latitude,
     decimalLongitude = .data$Longitude,
     geodeticDatum = "EPSG:4326",
-    coordinateUncertaintyInMeters = 30
+    coordinateUncertaintyInMeters = 30,
+    verbatimCoordinateSystem = "WGS84"
   )
 
 # Create the 'occurrence' table, mapping each observed species to Darwin Core

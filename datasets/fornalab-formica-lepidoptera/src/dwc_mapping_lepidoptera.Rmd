@@ -146,6 +146,7 @@ event <-
     decimalLongitude = .data$LON,
     geodeticDatum = "EPSG:4326",
     coordinateUncertaintyInMeters = 30,
+    verbatimCoordinateSystem = "WGS84",
     eventRemarks = .data$`Remarks (Wind, rain, moon, cloudiness)`
   ) %>% 
   dplyr::distinct()
