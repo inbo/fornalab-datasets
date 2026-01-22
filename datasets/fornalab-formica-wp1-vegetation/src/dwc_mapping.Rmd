@@ -40,6 +40,16 @@ raw_data_digitalization <- read_excel(here::here(directory, "raw", "Vegetation s
 
 ## Data
 
+### Provide (meta)data
+
+```{r}
+title <- "FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
+publisher <- "Ghent University"
+dataset_id <- "https://doi.org/10.15468/be9pwc"
+data_language <- "en"
+data_license <- "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
+```
+
 ### Data preparation
 
 Create ID's and join data frames.
@@ -181,7 +191,6 @@ Documenting the provenance and scope of datasets is required in order to publish
 
 ```{r basic metadata}
 short_name <- "FORMICA_VEG"
-title <- "FORMICA_VEG - Vegetation surveys along edge-to-core transects in open and dense forests in the framework of the Forest Microclimate Assessment (FORMICA) project"
 abstract <- c(
   paste0("\"", title, "\" is a sampling event dataset published by Ghent University. It contains information on 125 sampling events (vegetation relevées of 3 x 3 m²) with 4159 validated occurrences of vascular plants in ancient deciduous broadleaved forests in temperate Europe. These data were collected to study understorey vegetation biodiversity and composition responses to distance to the forest edge in ancient forest stands with different management types in 45 edge-to-interior forest transects across Europe (Govaert et al., 2019, <ulink url=\"http://doi.org/10.1111/jvs.12844\"><citetitle>http://doi.org/10.1111/jvs.12844</citetitle></ulink>). The aim was to disentangle the effects of the management type and the distance to the edge on alpha diversity of understorey plants in multiple European regions, while accounting for environmental characteristics. Issues with the dataset can be reported at https://github.com/inbo/fornalab-datasets/issues."),
 "We have released this dataset to the public domain under a Creative Commons Zero waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata or via opendata@inbo.be.",
@@ -190,13 +199,9 @@ abstract <- c(
 ```
 
 ```{r metadata}
-publisher <- "Ghent University"
-dataset_id <- "https://doi.org/10.15468/be9pwc"
 update_frequency <- "notPlanned"
 type <- "Samplingevent"
 metadata_language <- "en"
-data_language <- "en"
-data_license <- "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
 metadata_license <- "cc0-1.0"
 creators <- list(
   list(
