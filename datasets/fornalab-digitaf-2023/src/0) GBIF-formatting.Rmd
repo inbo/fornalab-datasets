@@ -88,7 +88,7 @@ title <- "Landscape mitigation effects for improvements of biodiversity levels i
 abstract <- c(
   "DIGITAF_BIODIVERSITY_FLEMISH_TREEROWS is a sampling event dataset published by Ghent University. It contains information on an exhaustive sampling event in 64 Flemish plots across 27 cereal fields. At each field, a plot was established in a bordering tree row (tree), in a treeless field margin (crtl) and in 10 fields we had the permission to sample in the field (crop). Fields were selected along a gradient of landscape composition acroos the available Flemish palette of landscapes. The dataset includes information on a biodiversity balance sampled as a snapshot with high taxonomic resolution. Mentioned groups were identified by any of our co-authors (unless otherwise indicated) to high taxonomic resolution (generally species level). Methods applied incorporated (i) 2 pitfall traps (14 days, Ø 9cm, d 11cm, autoantifreeze dilution, June) for beetles (Histeridae, Carabidae, Staphylinidae), spiders, ants, isopods, millipedes, centipedes and harvestmen, (ii) a transect walk (50m, 15', May-June & September) along the plot for lepidoptera, bees, wasps, flies and pollinating beetles, (iii) a vegetation quadrat of 10m² (2x5 or 1x10, depending on margin width, May-June) for plants and (iv) AudioMoth deployment between 05:15 CET-10:00 CET, 19:30-22:00 CET and 22:30-02:00 CET (48h, 1' per 15', 0-96 kHz, May-June) for birds and bats. Audiofiles were processed with BTO acoustic pipeline and the BirdNET analyzer with manual verification afterwards. Bat and bird data are presented in presence-absence (under one date, better resolution data can be requested), plant data in cover percentage and all other data in number of individuals caught. A metadata-file with parcel specifications will be published with the Zenodo-records of this dataset and can be requested through our contacts",
 "We have released this dataset under a Creative Commons waiver. If you have any questions regarding this dataset, don't hesitate to contact us via the contact information provided in the metadata.",
-"This sampling took place in the framework of the DIGItal Tools to help AgroForestry (<a href=\"https://digitaf.eu/\">DigitAF</a>) project (grant	agreement	no. 101059794), co-funded	by	the	European	Commission and the	European	Research	Agency,	within	the	Horizon	Europe	programme. This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO). We thank Marc van Kerckvoorde for the intensive identifications of carabids, staphylinids and histerids.")
+"This sampling took place in the framework of the DIGItal Tools to help AgroForestry (<a href=\"https://digitaf.eu/\">DigitAF</a>) project (grant	agreement	no. 101059794), co-funded	by	the	European	Commission and the	European	Research	Agency,	within	the	Horizon	Europe	programme. This dataset was published with technical support provided by the Research Institute for Nature and Forest (INBO). We thank Marc van Kerckvoorde for the intensive identifications of carabids, staphylinids and histerids, Jens D'Haeseleer for the bee identifications, Léon Baert for performing identifications on missorted spiders and Jef Hendrix for verifying some hoverfly specimens. .")
 ```
 
 ```{r metadata}
@@ -111,8 +111,8 @@ creators <- list(   # If info not available: Add: NA_character_
   ),
   list(
     title = "Maxime Eeraerts",
-    email = "",
-    organization = "Forest & Nature Lab, Ghent University", # Two affiliations: how to adress properly?
+    email = "Maxime.eeraerts@ugent.be",
+    organization = "Forest & Nature Lab, Ghent University", # Two affiliations: how to adress properly? (Estación Biológica de Doñana)
     first_name = "Maxime",
     last_name = "Eeraerts",
     orcid = "0000-0003-2739-9704"
@@ -133,41 +133,49 @@ creators <- list(   # If info not available: Add: NA_character_
     last_name = "De Smedt",
     orcid = "0000-0002-3073-6751"
   ),
+  #list(
+  #  title = "Léon Baert",
+  #  email = "lbaert@naturalsciences.be",
+  #  organization = "",
+  #  first_name = "Léon",
+  #  last_name = "Baert",
+  #  orcid = ""
+  #),
   list(
     title = "Augustijn De Ketelaere",
-    email = "augustijn.deketelaere@ugent.be",
-    organization = "",
+    email = "augustijn.de.ketelaere@gmail.com",
+    organization = "Aculea, Natuurpunt", # Two affiliations: how to adress properly? (Royal Belgian Institute of Natural Sciences (scientific collaborator))
     first_name = "Augustijn",
     last_name = "De Ketelaere",
-    orcid = ""
+    orcid = "0009-0007-0260-5483"
   ),
   list(
     title = "Wouter Dekoninck",
     email = "wdekonick@naturalsciences.be",
-    organization = "",
+    organization = "Royal Belgian Institute of Natural Sciences",
     first_name = "Wouter",
     last_name = "Dekoninck",
-    orcid = ""
+    orcid = "0000-0002-7065-7310"
   ),
-  list(
-    title = "Jens D'Haeseleer",
-    email = "jens.dhaeseleer@natuurpunt.be",
-    organization = "",
-    first_name = "Jens",
-    last_name = "D'Haeseleer",
-    orcid = ""
-  ),
-  list(
-    title = "Jef Hendrix",
-    email = "jef.hendrix@natuurpunt.be",
-    organization = "",
-    first_name = "Jef",
-    last_name = "Hendrix",
-    orcid = ""
-  ),
+  #list(
+  #  title = "Jens D'Haeseleer",
+  #  email = "jens.dhaeseleer@natuurpunt.be",
+  #  organization = "Aculea, Natuurpunt Studie",
+  #  first_name = "Jens",
+  #  last_name = "D'Haeseleer",
+  #  orcid = ""
+  #),
+  #list(
+  #  title = "Jef Hendrix",
+  #  email = "jef.hendrix@natuurpunt.be",
+  #  organization = "Natuurpunt",
+  #  first_name = "Jef",
+  #  last_name = "Hendrix",
+  #  orcid = ""
+  #),
   list(
     title = "Koen Lock",
-    email = "",
+    email = "koen_lock@hotmail.com",
     organization = "",
     first_name = "Koen",
     last_name = "Lock",
@@ -184,14 +192,14 @@ creators <- list(   # If info not available: Add: NA_character_
   list(
     title = "Bob Vandendriessche",
     email = "bob.vandendriessche@rlhp.be",
-    organization = "",
+    organization = "Bat Working Group, Natuurpunt",
     first_name = "Bob",
     last_name = "Vandendriessche",
-    orcid = ""
+    orcid = "0009-0009-3802-1820"
   ),
   list(
     title = "Johan Van Keer",
-    email = "",
+    email = "johan.van.keer1@gmail.com",
     organization = "",
     first_name = "Johan",
     last_name = "Van Keer",
